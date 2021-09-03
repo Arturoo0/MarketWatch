@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     Form,
     Button,
@@ -10,24 +10,50 @@ const cardStyle = {
     padding: '10px 25px'
 };
 
+const pullFormData = (credObj) => {
+    console.log(credObj);
+}
+
 const LoginForm = () => {
-    return (
+    const [enteredEmail, updateEnteredEmail] = useState();
+    const [enteredUsername, updateEnteredUsername] = useState();
+    const [enteredPassword, updateEnteredPassword] = useState();
+     return (
         <Card style={cardStyle}>
             <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" />
-                    <Form.Text className="text-muted">
-                    </Form.Text>
+                    <Form.Control 
+                        type="email" 
+                        placeholder="Enter email" 
+                        onChange={e => updateEnteredEmail(e.target.value)}
+                    />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control 
+                        type="username" 
+                        placeholder="Enter username" 
+                        onChange={e => updateEnteredUsername(e.target.value)}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control 
+                        type="password" 
+                        placeholder="Enter password" 
+                        onChange={e => updateEnteredPassword(e.target.value)}
+                    />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
-                </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button 
+                    variant="primary" 
+                    type="submit" 
+                    onClick={e => pullFormData({
+                        email: enteredEmail,
+                        username: enteredUsername,
+                        password: enteredPassword
+                    })}
+                >
                     Submit
                 </Button>
             </Form>
