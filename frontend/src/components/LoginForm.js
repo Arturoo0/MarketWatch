@@ -15,8 +15,15 @@ const cardStyle = {
 };
 
 const pullFormData = async (credObj) => {
-    console.log(credObj);
-    console.log(await get());
+    const {email, username, password} = credObj;
+    const emailIsValid = email !== undefined; 
+    const usernameIsValid = username !== undefined;
+    const passwordIsValid = password !== undefined;
+
+    if (!(emailIsValid || usernameIsValid || passwordIsValid)){
+        return 'undefined value pass provided in credObj';
+    }
+    console.log(await post('/auth/sign-up', credObj));
 }
 
 const LoginForm = () => {
@@ -52,7 +59,7 @@ const LoginForm = () => {
                 </Form.Group>
                 <Button 
                     variant="primary" 
-                    type="submit" 
+                    type="button" 
                     onClick={e => pullFormData({
                         email: enteredEmail,
                         username: enteredUsername,

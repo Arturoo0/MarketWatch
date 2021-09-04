@@ -1,16 +1,23 @@
 
 import axios from 'axios';
 
-const get = async (endpoint) => {
+const baseReqPath = 'http://localhost:3000';
+const checkPassedEndpoint = (endpoint) => {
     if (endpoint === undefined){
-        throw 'No endpoint provided in get(endpoint: string) call';
+        throw 'No endpoint provided in get(endpoint: string) call'; 
     }
-    const baseReqPath = `http://localhost:3000${endpoint}`
-    console.log(baseReqPath);
 }
 
-const post = async (endpoint) => {
-    console.log(endpoint);
+const get = async (endpoint) => {
+    checkPassedEndpoint(endpoint);
+    const reqPath = baseReqPath + endpoint;
+}
+
+const post = async (endpoint, data) => {
+    checkPassedEndpoint(endpoint);
+    const reqPath = baseReqPath + endpoint;
+    const res = await axios.post(reqPath, data);
+    console.log(res);
 }
 
 export {
