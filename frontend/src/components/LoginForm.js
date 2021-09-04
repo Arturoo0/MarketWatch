@@ -5,13 +5,18 @@ import {
     Button,
     Card
 } from 'react-bootstrap';
+import {
+    get,
+    post
+} from '../utils/baseRequest.js'
 
 const cardStyle = {
     padding: '10px 25px'
 };
 
-const pullFormData = (credObj) => {
+const pullFormData = async (credObj) => {
     console.log(credObj);
+    console.log(await get());
 }
 
 const LoginForm = () => {
