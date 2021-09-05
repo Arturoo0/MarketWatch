@@ -2,11 +2,6 @@
 import axios from 'axios';
 
 const baseReqPath = 'http://localhost:3000';
-const config = {
-    headers: {
-      'Content-Type': 'application/JSON'
-    }
-};
 
 const checkPassedEndpoint = (endpoint) => {
     if (endpoint === undefined){
@@ -19,10 +14,25 @@ const get = async (endpoint) => {
     const reqPath = baseReqPath + endpoint;
 }
 
-const post = async (endpoint, data) => {
+const post = async (endpoint, body) => {
     checkPassedEndpoint(endpoint);
     const reqPath = baseReqPath + endpoint;
-    const res = await axios.post(reqPath, data, config);
+    try {
+        const res = await axios({
+            method: 'post',
+            url: reqPath,
+            data: body,
+            headers: {
+                'Content-Type': 'application/json'
+            } 
+        });
+        return res;
+    }catch(err){
+        return {
+            status: err.response.status, 
+            errRes: err.response.data
+        }
+    }
 }
 
 export {

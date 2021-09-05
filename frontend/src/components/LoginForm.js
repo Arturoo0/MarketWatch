@@ -23,7 +23,18 @@ const pullFormData = async (credObj) => {
     if (!(emailIsValid || usernameIsValid || passwordIsValid)){
         return 'undefined value pass provided in credObj';
     }
-    console.log(await post('/auth/sign-up', credObj));
+    const res = await post('/auth/sign-up', credObj);
+    switch (res.status){
+        case 201:
+            alert(res.data.message);
+            break;
+        case 409:
+            alert(res.errRes.message);
+            break;
+        case 400:
+            alert(res.errRes.message)
+            break;
+    }
 }
 
 const LoginForm = () => {

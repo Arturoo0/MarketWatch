@@ -45,7 +45,7 @@ authRouter.post('/sign-up', async (req, res) => {
     try {
         const isEmailRegistered = await User.exists({email: _email});
         if (isEmailRegistered){
-            return res.send({
+            return res.status(409).send({
                 message: 'Account already exists, existing registered email was used.'
             });
         }else{
@@ -55,17 +55,16 @@ authRouter.post('/sign-up', async (req, res) => {
                 password: await hashCred(_password)
             });
             await user.save();
-            return res.send({
+            return res.status(201).send({
                 message: 'Account created.'
             })
         }
     }catch (error){
-        if (error === undefined){
-            res.send({
-                message : 'Failed to post user credentials.'
+        if (error !== undefined){
+            res.status(400).send({
+                message : 'Failed to process provided user credentials.'
             })
         }
-        console.log('Error', error);
     }
 }); 
 
