@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LoginForm } from '../components';
+import { SignupForm, LoginForm } from '../components';
 
 const containerStyle = {
     display: 'flex',

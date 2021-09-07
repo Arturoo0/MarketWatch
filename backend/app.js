@@ -3,11 +3,16 @@ const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 
 const auth = require('./routes/auth.js');
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3001'
+}))
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({
   extended: true
 }));

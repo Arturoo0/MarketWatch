@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
 const baseReqPath = 'http://localhost:3000';
 
 const checkPassedEndpoint = (endpoint) => {
@@ -23,11 +24,13 @@ const post = async (endpoint, body) => {
             url: reqPath,
             data: body,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'withCredentials': true
             } 
         });
         return res;
     }catch(err){
+        console.log(err);
         return {
             status: err.response.status, 
             errRes: err.response.data

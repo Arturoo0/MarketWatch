@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { 
     Form,
     Button,
@@ -23,21 +24,19 @@ const pullFormData = async (credObj) => {
     if (!(emailIsValid || usernameIsValid || passwordIsValid)){
         return 'undefined value pass provided in credObj';
     }
-    const res = await post('/auth/sign-up', credObj);
+    const res = await post('/auth/login', credObj);
     switch (res.status){
         case 201:
             alert(res.data.message);
             break;
-        case 409:
+        case 401:
             alert(res.errRes.message);
-            break;
-        case 400:
-            alert(res.errRes.message)
             break;
     }
 }
 
 const LoginForm = () => {
+    const [cookies, setCookie] = useCookies(['sessionID']);
     const [enteredEmail, updateEnteredEmail] = useState();
     const [enteredUsername, updateEnteredUsername] = useState();
     const [enteredPassword, updateEnteredPassword] = useState();
