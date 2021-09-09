@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useHistory } from "react-router-dom";
 
 const sidenavStyle = {
     height: '100%',
@@ -27,14 +28,20 @@ const dashSelectorStyle = {
     outline: 'none'
 }
 
+const handleLinkClick = (selector) => {
+    window.location.pathname = `/dashboard/${selector}`;
+}
+
 const generateSidePanelSelectors = (selectors) => {
     const res = selectors.map((selector) => 
-        <a href={`#${selector}`} style={dashSelectorStyle}>{selector}</a>
+        <a onClick={
+            () => handleLinkClick(selector)
+        } style={dashSelectorStyle}>{selector}</a>
     );
     return res;
 };
 
-const Dashboard = () => {
+const Dashboard = (page) => {
     return (
         <div>
             <div style={sidenavStyle}>
@@ -42,7 +49,7 @@ const Dashboard = () => {
                     generateSidePanelSelectors(
                         [
                             'View',
-                            'Positions'
+                            'Add'
                         ]
                     )
                 }
