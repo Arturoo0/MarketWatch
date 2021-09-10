@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Search } from '../components';
 
 const addContainerStyle = {
@@ -7,9 +7,11 @@ const addContainerStyle = {
 };
 
 const Add = () => {
+    const [currentEnteredSearchText, updateCurrentEnteredSearchText] = useState();
+
     return (
         <div style={addContainerStyle}>
-            <Search />
+            <Search onChangeHandle={(text) => {updateCurrentEnteredSearchText(text)}}/>
         </div>
     );
 };

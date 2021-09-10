@@ -1,14 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 
-const Search = () => {
-    const [currentEnteredText, updateCurrentEnteredText] = useState();
-
+const Search = (props) => {
     return (    
         <div>
             <input 
                 placeholder={'Search...'}
-                onChange={e => {updateCurrentEnteredText(e.target.value)}}
+                onChange={e => props.onChangeHandle(e.target.value)}
             ></input>
         </div>
     ); 
