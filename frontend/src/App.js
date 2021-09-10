@@ -1,6 +1,8 @@
 import Authentication from "./pages/Authentication";
 import Dashboard from "./pages/Dashboard"; 
 import Add from "./pages/Add";
+import { useEffect, useState } from "react";
+import { get } from './utils/baseRequest.js';
 import {
   BrowserRouter as Router,
   Switch,
@@ -15,6 +17,11 @@ const mainContent = {
 }
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  useEffect(async () => {
+    const authenticationRes = await get('/auth/is-valid-session', {});
+  }, []);
+
   return (
     <Router>
       <div> 

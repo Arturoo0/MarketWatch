@@ -78,6 +78,11 @@ authRouter.post('/sign-up', async (req, res) => {
     }
 }); 
 
+authRouter.get('/is-valid-session', async (req, res) => {
+    console.log(req.cookies);
+    res.send('hello');
+});
+
 module.exports = {
     authRouter
 }
