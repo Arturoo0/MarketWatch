@@ -8,8 +8,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 
-finnhubAPI.getTickers();
-
 const auth = require('./routes/auth.js');
 app.use(cors({
   credentials: true,
