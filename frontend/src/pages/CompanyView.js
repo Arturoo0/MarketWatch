@@ -17,6 +17,7 @@ const logoStyling = {
 
 const CompanyView = (props) => {
     const [companyData, setCompanyData] = useState(null);
+    const [quoteData, setQuoteData] = useState(null);
     useEffect(async () => {
         const pullTickerFromURL = () => {
             const windowUrl = window.location.search;
@@ -30,9 +31,13 @@ const CompanyView = (props) => {
         };  
         const symbol = pullTickerFromURL();
         if (symbol !== null){
-            const resourceLocation = `/market-data/company-profile-2/${symbol}` 
-            const res = await get(resourceLocation, {});
-            setCompanyData(res);
+            const companyProfileResourceLocation = `/market-data/company-profile-2/${symbol}`
+            const companyQuoteResourceLocation = `/market-data/company-quote/${symbol}` 
+ 
+            const profile = await get(companyProfileResourceLocation, {});
+            const quote = await get(companyQuoteResourceLocation, {});
+            setCompanyData(profile);
+            setQuoteData(quote);
         }
     }, []);
 
@@ -54,6 +59,30 @@ const CompanyView = (props) => {
         };
     };
 
+    const renderQuoteFigures = () => {
+        if (quoteData === null) return null; 
+        const {
+            c : currentPrice,
+            d : change,
+            dp: percentChange,
+            h: highPriceOfTheDay,
+            l: lowPriceOfTheDay,
+            o: openPriceOfTheDay,
+            pc: previousClosePrice
+        } = quoteData.data.companyQuote;
+        return (
+            <ul>
+                <li>{`Current price: ${currentPrice}`}</li>
+                <li>{`Change: ${change}`}</li>
+                <li>{`Percent change: ${percentChange}%`}</li>
+                <li>{`High price of the day: ${highPriceOfTheDay}`}</li>
+                <li>{`Low price of the day: ${lowPriceOfTheDay}`}</li>
+                <li>{`Open price of the day: ${openPriceOfTheDay}`}</li>
+                <li>{`Previous close price: ${previousClosePrice}`}</li>
+            </ul>
+        );
+    };
+
     return (   
         <div>
             {
@@ -72,6 +101,7 @@ const CompanyView = (props) => {
                         </div>
                     </div>
                     <hr />
+                    {renderQuoteFigures()}
                 </div>
             }
         </div>

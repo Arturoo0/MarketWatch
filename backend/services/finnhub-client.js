@@ -40,6 +40,15 @@ class FinnHubClient {
             companyProfile2: res
         };
     }
+
+    async getCompanyQuote(companySymbol) {
+        const res = await this.makeExternalApiCall('/quote', {
+            symbol: companySymbol
+        });
+        return {
+            companyQuote: res
+        }; 
+    }
 }
 
 module.exports = new FinnHubClient({
