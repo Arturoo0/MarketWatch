@@ -1,12 +1,11 @@
 const express = require('express');
-const { getSymbols } = require('../utils/finnhubData');
+const FinnhubClient = require('../services/finnhub-client');
+
 const marketDataRouter = express.Router();
 
 marketDataRouter.get('/us-ex-symbols', async (req, res) => {
-    const US_EX_SYMBOLS = await getSymbols();
-    res.send({
-        US_EX_SYMBOLS
-    });
+    const usExSymbols = await FinnhubClient.getSymbols();
+    res.json(usExSymbols);
 });
 
 module.exports = {
