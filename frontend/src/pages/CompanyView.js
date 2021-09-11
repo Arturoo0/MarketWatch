@@ -6,6 +6,15 @@ const companyViewContainerStyle = {
     padding: '4% 4%'
 };
 
+const headerContainerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between'
+}
+
+const logoStyling = {
+    height: '2em'
+}
+
 const CompanyView = (props) => {
     const [companyData, setCompanyData] = useState(null);
     useEffect(async () => {
@@ -41,7 +50,7 @@ const CompanyView = (props) => {
             logo
         } = companyData.data.companyProfile2;
         if (logo !== undefined || logo !== null || logo !== ''){
-            return <img src={logo}/> 
+            return <img style={logoStyling} src={logo}/> 
         };
     };
 
@@ -52,12 +61,17 @@ const CompanyView = (props) => {
                 <h3>No existing information</h3> 
                 :
                 <div style={companyViewContainerStyle}>
-                    <div>
-                        <h3>
-                            {renderCompanyHeader()}
+                    <div style={headerContainerStyle}>
+                        <div>
+                            <h3>
+                                {renderCompanyHeader()}
+                            </h3>
+                        </div>
+                        <div>
                             {renderCompanyLogoImage()}
-                        </h3>
+                        </div>
                     </div>
+                    <hr />
                 </div>
             }
         </div>
