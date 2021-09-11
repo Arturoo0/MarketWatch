@@ -1,18 +1,26 @@
 
 import React from 'react';
+import { Card, Button } from 'react-bootstrap';
 
 const cardStyle = {
     margin: '0 0 10px 0',
     borderRadius: '3px',
-    padding: '15px 5px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)' 
+    padding: '15px 5px 15px 0'
 }
 
 const SymbolLookupCard = (props) => {
     return (
         <div style={cardStyle}>
-            {props.data.symbol}
-            
+            <Card style={{ width: '18rem' }}>
+                <Card.Body>
+                    <Card.Title>{props.data.symbol}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">{props.data.symbolType}</Card.Subtitle>
+                    <Card.Text>
+                        {props.data.description}
+                    </Card.Text>
+                    <Card.Link href="#"><Button>View more</Button></Card.Link>
+                </Card.Body>
+            </Card>
         </div>
     );
 };
