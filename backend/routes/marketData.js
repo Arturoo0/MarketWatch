@@ -4,7 +4,8 @@ const FinnhubClient = require('../services/finnhub-client');
 const marketDataRouter = express.Router();
 
 marketDataRouter.get('/us-ex-symbols', async (req, res) => {
-    const usExSymbols = await FinnhubClient.getSymbols();
+    const { keywords } = req.query;
+    const usExSymbols = await FinnhubClient.getSymbols(keywords);
     res.json(usExSymbols);
 });
 
