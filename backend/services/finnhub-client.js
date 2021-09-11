@@ -27,7 +27,9 @@ class FinnHubClient {
             });
             this.hasFetchedSymbols = true;
         }
-        return this.symbols;
+        return {
+            US_EX_SYMBOLS: this.symbols,
+        };
     }
 }
 
