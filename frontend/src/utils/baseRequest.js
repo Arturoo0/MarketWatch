@@ -10,9 +10,23 @@ const checkPassedEndpoint = (endpoint) => {
     }
 }
 
-const get = async (endpoint) => {
+const get = async (endpoint, body) => {
     checkPassedEndpoint(endpoint);
     const reqPath = baseReqPath + endpoint;
+    try {
+        const res = await axios({
+            method: 'get',
+            url: reqPath,
+            data: body,
+            headers: {
+                'Content-Type': 'application/json',
+                'withCredentials': true 
+            }
+        });
+        return res;
+    }catch(err){
+        console.log(err);
+    }
 }
 
 const post = async (endpoint, body) => {
