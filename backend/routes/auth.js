@@ -79,8 +79,11 @@ authRouter.post('/sign-up', async (req, res) => {
 }); 
 
 authRouter.get('/is-valid-session', async (req, res) => {
-    console.log(req.cookies);
-    res.send('hello');
+    const query = { sessionID: req.cookies['authSession']};
+    const sessionExists = await Session.exists(query);
+    return res.send({
+        'isValidSession': sessionExists 
+    });
 });
 
 module.exports = {

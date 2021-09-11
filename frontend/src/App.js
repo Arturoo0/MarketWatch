@@ -1,6 +1,7 @@
 import Authentication from "./pages/Authentication";
 import Dashboard from "./pages/Dashboard"; 
 import Add from "./pages/Add";
+import SignedOut from "./pages/SignedOut";
 import { useEffect, useState } from "react";
 import { get } from './utils/baseRequest.js';
 import {
@@ -17,9 +18,10 @@ const mainContent = {
 }
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(async () => {
     const authenticationRes = await get('/auth/is-valid-session', {});
+    setIsAuthenticated(authenticationRes.data.isValidSession);
   }, []);
 
   return (
@@ -30,12 +32,19 @@ function App() {
             <Authentication />
           </Route>
           <Route path="/dashboard">
-            <Dashboard />
-            <div style={mainContent}>
-              <Route path="/dashboard/add">
-                <Add />
-              </Route>
-            </div>
+            {
+              isAuthenticated ?
+              <div>
+                <Dashboard />
+                <div style={mainContent}>
+                  <Route path="/dashboard/add">
+                    <Add />
+                  </Route>
+                </div>
+              </div>
+              : 
+              <SignedOut />
+            }
           </Route>
         </Switch>
       </div>
