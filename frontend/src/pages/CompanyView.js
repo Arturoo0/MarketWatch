@@ -2,6 +2,10 @@
 import { get } from '../utils/baseRequest';
 import React, { useEffect, useState } from 'react'; 
 
+const companyViewContainerStyle = {
+    padding: '4% 4%'
+};
+
 const CompanyView = (props) => {
     const [companyData, setCompanyData] = useState(null);
     useEffect(async () => {
@@ -19,10 +23,18 @@ const CompanyView = (props) => {
         if (symbol !== null){
             const resourceLocation = `/market-data/company-profile-2/${symbol}` 
             const res = await get(resourceLocation, {});
-            console.log(res);
             setCompanyData(res);
         }
     }, []);
+
+    const displayCompanyTitle = () => {
+        const {
+            name,
+            ticker 
+        } = companyData.data.companyProfile2
+        const companyHeader = `${name} (${ticker})`;
+        return companyHeader
+    };
 
     return (   
         <div>
@@ -30,8 +42,12 @@ const CompanyView = (props) => {
                 companyData === null ?
                 <h3>No existing information</h3> 
                 :
-                <div>
-                    {companyData.data.name}
+                <div style={companyViewContainerStyle}>
+                    <div>
+                        <h3>
+                            {displayCompanyTitle()}
+                        </h3>
+                    </div>
                 </div>
             }
         </div>
