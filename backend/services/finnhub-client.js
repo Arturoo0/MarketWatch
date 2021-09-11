@@ -31,6 +31,15 @@ class FinnHubClient {
             US_EX_SYMBOLS: this.symbols,
         };
     }
+
+    async getCompanyProfile2(companySymbol) {
+        const res = await this.makeExternalApiCall('/stock/profile2', {
+            symbol: companySymbol
+        });
+        return {
+            companyProfile2: res
+        };
+    }
 }
 
 module.exports = new FinnHubClient({
