@@ -27,13 +27,22 @@ const CompanyView = (props) => {
         }
     }, []);
 
-    const displayCompanyTitle = () => {
+    const renderCompanyHeader = () => {
         const {
             name,
             ticker 
-        } = companyData.data.companyProfile2
+        } = companyData.data.companyProfile2;
         const companyHeader = `${name} (${ticker})`;
         return companyHeader
+    };
+
+    const renderCompanyLogoImage = () => {
+        const {
+            logo
+        } = companyData.data.companyProfile2;
+        if (logo !== undefined || logo !== null || logo !== ''){
+            return <img src={logo}/> 
+        };
     };
 
     return (   
@@ -45,7 +54,8 @@ const CompanyView = (props) => {
                 <div style={companyViewContainerStyle}>
                     <div>
                         <h3>
-                            {displayCompanyTitle()}
+                            {renderCompanyHeader()}
+                            {renderCompanyLogoImage()}
                         </h3>
                     </div>
                 </div>
