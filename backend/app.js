@@ -11,10 +11,11 @@ const loggingMiddleware = require('./middleware/logging');
 const FinnHubClient = require('./services/finnhub-client');
 
 async function initCore() {
-  logger.info('Connecting to mongo ...');
+  logger.info('Connecting to MongoDB cluster ...');
   try {
-    mongoose.connect(process.env.DB_URI);
+    await mongoose.connect(process.env.DB_URI);
   } catch (error) {
+    logger.error('Failed to connect to MongoDB cluster ...');
     logger.error(error?.message);
     process.exit(1);
   }
@@ -23,8 +24,8 @@ async function initCore() {
   try {
     await FinnHubClient.fetchSymbols();
   } catch (error) {
-    logger.error(error.message);
     logger.error('Failed to pre-fetch, resorting to lazy load ...');
+    logger.error(error.message);
   }
 }
 
