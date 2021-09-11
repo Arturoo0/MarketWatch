@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const finnhubAPI = require('./utils/finnhubData');
+const auth = require('./routes/auth.js');
+const marketData = require('./routes/marketData.js');
 const cors = require('cors')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,7 +9,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 
-const auth = require('./routes/auth.js');
 app.use(cors({
   credentials: true,
   origin: 'http://localhost:3001'
@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json({}));
 app.use('/auth', auth.authRouter);
+app.use('/market-data', marketData.marketDataRouter);
 
 try {
   mongoose.connect(process.env.DB_URI);
