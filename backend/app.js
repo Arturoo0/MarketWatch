@@ -14,6 +14,7 @@ async function initCore() {
   logger.info('Connecting to MongoDB cluster ...');
   try {
     await mongoose.connect(process.env.DB_URI);
+    logger.info('Connected to MongoDB cluster');
   } catch (error) {
     logger.error('Failed to connect to MongoDB cluster ...');
     logger.error(error?.message);
@@ -23,6 +24,7 @@ async function initCore() {
   logger.info('Pre-fetching symbols ...');
   try {
     await FinnHubClient.fetchSymbols();
+    logger.info('Successfully pre-fetched symbols');
   } catch (error) {
     logger.error('Failed to pre-fetch, resorting to lazy load ...');
     logger.error(error.message);
