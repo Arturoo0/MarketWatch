@@ -1,12 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search } from '../components';
+import { Search, SymbolLookupCard } from '../components';
 import { get } from '../utils/baseRequest';
 
 const addContainerStyle = {
     padding: '10px 10px',
     height: '100vh'
 };
+
+const symbolContainerStyle = {
+    listStyle: 'none', 
+    padding: '0',
+    marginTop: '4px'
+}
 
 const Add = () => {
     const [currentEnteredSearchText, updateCurrentEnteredSearchText] = useState('');
@@ -33,7 +39,7 @@ const Add = () => {
             return <div>No matching symbols.</div>;
         }
         const res = filteredArr.map((symbols) => 
-            <li>{symbols}</li>
+            <li><SymbolLookupCard data={{symbol: symbols}}/></li>
         );
         return res; 
     }
@@ -41,7 +47,7 @@ const Add = () => {
     return (
         <div style={addContainerStyle}>
             <Search onChangeHandle={(text) => {updateCurrentEnteredSearchText(text)}}/>
-            <ul>
+            <ul style={symbolContainerStyle}>
                 {generateAvailableSymbols()}    
             </ul>
         </div>
