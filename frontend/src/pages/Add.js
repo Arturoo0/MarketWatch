@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, SymbolLookupCard } from '../components';
 import { get } from '../utils/baseRequest';
+import { useDebounce } from '../utils/utils';
 import { Row, Col } from 'react-bootstrap';
 
 const addContainerStyle = {
@@ -14,51 +15,39 @@ const symbolContainerStyle = {
 }
 
 const Add = () => {
-    const [currentEnteredSearchText, updateCurrentEnteredSearchText] = useState(undefined);
-    const [US_EX_SYMBOLS, setUS_EX_SYMBOLS] = useState(undefined);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [matchedSymbols, setMatchedSymbols] = useState({});
 
-    useEffect(async () => {        
-        if (US_EX_SYMBOLS === undefined){
-            const res = await get('/market-data/us-ex-symbols', {});
-            setUS_EX_SYMBOLS(res.data.US_EX_SYMBOLS);
-        }
-    }, [currentEnteredSearchText]); 
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    const generateAvailableSymbols = () => {
-        const chunkSize = 100;
-        let filteredArr = [];
-        if (US_EX_SYMBOLS === undefined || currentEnteredSearchText === undefined){
-            return null;
-        }else if (currentEnteredSearchText === '' || currentEnteredSearchText === ' '){
-            filteredArr = US_EX_SYMBOLS.splice(0, chunkSize);
-        }else{
-            for (let pos = 0; pos < US_EX_SYMBOLS.length; pos++){
-                if (US_EX_SYMBOLS[pos].displaySymbol.includes(currentEnteredSearchText)){
-                    filteredArr.push(US_EX_SYMBOLS[pos]);
-                }
-                if (filteredArr.length > chunkSize) break;
-            }
-        }
-        if (filteredArr.length === 0){
-            return <div>No matching symbols.</div>;
-        }
-        const res = filteredArr.map((symbols) => 
+    useEffect(async () => {
+        const searchQuery = {
+            keywords: searchTerm,
+        };
+        const queryString = new URLSearchParams(searchQuery).toString();
+        const response = await get(`/market-data/us-ex-symbols?${queryString}`);
+        const matchedSymbols = response.data;
+        setMatchedSymbols(matchedSymbols);
+    }, [debouncedSearchTerm]);
+
+    const renderMatchedSymbols = () => {
+        const renderedCards = matchedSymbols?.US_EX_SYMBOLS?.map((symbol) =>
             <Col><SymbolLookupCard data={
                 {
-                    symbol: symbols.displaySymbol,
-                    description: symbols.description,
-                    symbolType: symbols.type
+                    symbol: symbol.displaySymbol,
+                    description: symbol.description,
+                    symbolType: symbol.type
                 }
             }/></Col>
         );
-        return res; 
+        return renderedCards?.length > 0 ? renderedCards : 'No matching symbols.';
     }
 
     return (
         <div style={addContainerStyle}>
-            <Search onChangeHandle={(text) => {updateCurrentEnteredSearchText(text)}}/>
+            <Search onChangeHandle={(text) => {setSearchTerm(text)}}/>
             <Row style={symbolContainerStyle}>
-                {generateAvailableSymbols()}    
+                {renderMatchedSymbols()}
             </Row>
         </div>
     );
