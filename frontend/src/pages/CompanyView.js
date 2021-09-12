@@ -1,6 +1,6 @@
 
 import { get } from '../utils/baseRequest';
-import { QuoteInfo } from '../components';
+import { QuoteInfo, RelatedNews } from '../components';
 import React, { useEffect, useState } from 'react'; 
 import { 
     Spinner
@@ -35,6 +35,7 @@ const loaderStyle = {
 const CompanyView = (props) => {
     const [companyData, setCompanyData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
+    const [companyNews, setCompanyNews] = useState(null);
     useEffect(async () => {
         const pullTickerFromURL = () => {
             const windowUrl = window.location.search;
@@ -50,11 +51,15 @@ const CompanyView = (props) => {
         if (symbol !== null){
             const companyProfileResourceLocation = `/market-data/company-profile-2/${symbol}`
             const companyQuoteResourceLocation = `/market-data/company-quote/${symbol}` 
- 
+            const companyNewsResourceLocation = `/market-data/company-news/${symbol}` 
+
             const profile = await get(companyProfileResourceLocation, {});
             const quote = await get(companyQuoteResourceLocation, {});
+            const news = await get(companyNewsResourceLocation, {});
+
             setCompanyData(profile);
             setQuoteData(quote);
+            setCompanyNews(news);
         }
     }, []);
 
@@ -105,6 +110,9 @@ const CompanyView = (props) => {
                     <hr />
                     <div>
                         {renderQuoteFigures()}
+                    </div>
+                    <div>
+                        <RelatedNews news={companyNews}/>
                     </div>
                 </div>
             }
