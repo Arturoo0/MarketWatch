@@ -63,7 +63,7 @@ class SearchService {
             const documentBlob = getBlob(document);
             const documentTokens = tokenizeAndNormalize(documentBlob);
             documentTokens.forEach((token) => {
-                const nGrams = token.length == 1
+                const nGrams = token.length === 1
                     ? token
                     : ngrams(nGramN, token);
                 const tokenNGrams = new Set(nGrams);
@@ -89,7 +89,7 @@ class SearchService {
         const queryTokens = tokenizeAndNormalize(query);
         let discount = 0;
         queryTokens.forEach((token) => {
-            const nGrams = token.length == 1
+            const nGrams = token.length === 1
                 ? token
                 : ngrams(nGramN, token);
             const tokenNGrams = new Set(nGrams);
