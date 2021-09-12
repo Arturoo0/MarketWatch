@@ -7,11 +7,21 @@ import { Row, Col } from 'react-bootstrap';
 
 const addContainerStyle = {
     padding: '10px 10px',
-    height: '100vh'
+    height: '100vh',
 };
 
 const symbolContainerStyle = {
     marginTop: '4px'
+};
+
+const noMatchesTextStyle = {
+    margin: '1rem',
+    textAlign: 'center',
+}
+
+const titleStyle = {
+    marginTop: '2rem',
+    marginBottom: '2rem',
 }
 
 const Add = () => {
@@ -40,11 +50,14 @@ const Add = () => {
                 }
             }/></Col>
         );
-        return renderedCards?.length > 0 ? renderedCards : 'No matching symbols.';
+        return renderedCards?.length > 0
+            ? renderedCards
+            : <div style={noMatchesTextStyle}>No securities match this query.</div>
     }
 
     return (
         <div style={addContainerStyle}>
+            <h2 style={titleStyle}>Securities</h2>
             <Search onChangeHandle={(text) => {setSearchTerm(text)}}/>
             <Row style={symbolContainerStyle}>
                 {renderMatchedSymbols()}
