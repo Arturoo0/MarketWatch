@@ -11,20 +11,12 @@ import {
   Route,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { setAuthenticatedAction } from './actions/authenticationActions.js';
 
 const mainContent = {
   marginLeft: '200px',
   fontSize: '20px',
   padding: '0px 10px'
-}
-
-const setAuthenticatedAction = (isAuthenticated) => {
-  return {
-    type: 'SET_AUTHENTICATED',
-    data: {
-      isAuthenticated,
-    }
-  }
 }
 
 function App(props) {
