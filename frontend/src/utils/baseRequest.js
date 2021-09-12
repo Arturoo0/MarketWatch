@@ -43,7 +43,7 @@ const post = async (endpoint, body) => {
             } 
         });
         return res;
-    }catch(err){
+    } catch(err) {
         console.log(err);
         return {
             status: err.response.status, 

@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 const auth = require('./routes/auth.js');
@@ -8,7 +9,10 @@ const logger = require('./utils/logger');
 const config = require('./config');
 const marketData = require('./routes/marketData.js');
 const loggingMiddleware = require('./middleware/logging');
+const errorHandlingMiddleware = require('./middleware/errorHandler');
 const FinnHubClient = require('./services/finnhub-client');
+
+const APP_START_TIME = Date.now();
 
 async function initCore() {
     logger.info('Connecting to MongoDB cluster ...');
@@ -17,7 +21,7 @@ async function initCore() {
         logger.info('Connected to MongoDB cluster');
     } catch (error) {
         logger.error('Failed to connect to MongoDB cluster ...');
-            logger.error(error?.message);
+        logger.error(error?.message);
         process.exit(1);
     }
 
@@ -36,6 +40,7 @@ async function initApp() {
 
     const app = express();
 
+    app.use(helmet());
     app.use(cors({
         credentials: true,
         origin: config.FRONTEND_HOST,
@@ -50,9 +55,14 @@ async function initApp() {
     app.use('/auth', auth.authRouter);
     app.use('/market-data', marketData.marketDataRouter);
 
-    app.get('/', (req, res) => {
-        res.send('Server is running.');
-    })
+    app.get('/status', (req, res) => {
+        const statusData = {
+            uptime: Date.now() - APP_START_TIME,
+        };
+        res.json(statusData);
+    });
+
+    app.use(errorHandlingMiddleware);
     
     app.listen(config.PORT, () => {
         logger.info(`Server listening at http://localhost:${config.PORT}`);
