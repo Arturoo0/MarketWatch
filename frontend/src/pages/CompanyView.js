@@ -66,7 +66,6 @@ const CompanyView = (props) => {
 
     const renderQuoteFigures = () => {
         if (quoteData === null) return null; 
-        console.log(quoteData);
         const {
             currentPrice,
             change,
@@ -75,7 +74,7 @@ const CompanyView = (props) => {
             lowPriceOfTheDay,
             openPriceOfTheDay,
             previousClosePrice
-        } = quoteData.data;
+        } = quoteData.data.companyQuote;
         return (
             <ul style={quoteFigureStyling}>
                 <li>{`Current price: ${currentPrice}`}</li>

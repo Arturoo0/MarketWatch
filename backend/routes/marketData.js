@@ -17,16 +17,7 @@ marketDataRouter.get('/company-profile-2/:symbol', async (req, res) => {
 
 marketDataRouter.get('/company-quote/:symbol', async (req, res) => {
     const companyQuote = await FinnhubClient.getCompanyQuote(req.params.symbol);
-    const {c,d,dp,h,l,o,pc} = companyQuote.companyQuote
-    res.json({
-        currentPrice : c,
-        change : d,
-        percentChange: dp,
-        highPriceOfTheDay: h,
-        lowPriceOfTheDay: l,
-        openPriceOfTheDay: o,
-        previousClosePrice: pc
-    });
+    res.json(companyQuote);
 })
 
 module.exports = {

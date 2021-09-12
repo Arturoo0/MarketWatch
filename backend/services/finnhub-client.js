@@ -66,8 +66,17 @@ class FinnHubClient {
         const res = await this.makeExternalApiCall('/quote', {
             symbol: companySymbol
         });
+        const {c,d,dp,h,l,o,pc} = res;
         return {
-            companyQuote: res
+            companyQuote: {
+                currentPrice : c,
+                change : d,
+                percentChange: dp,
+                highPriceOfTheDay: h,
+                lowPriceOfTheDay: l,
+                openPriceOfTheDay: o,
+                previousClosePrice: pc
+            }
         }; 
     }
 }
