@@ -1,29 +1,47 @@
 const express = require('express');
-const { findById } = require('../models/User');
 const FinnhubClient = require('../services/finnhub-client');
+const checkAuthentication = require('../middleware/authentication');
+const { asyncHandlerWrapper } = require('../utils/apiUtils');
 
 const marketDataRouter = express.Router();
 
-marketDataRouter.get('/us-ex-symbols', async (req, res) => {
-    const { keywords } = req.query;
-    const usExSymbols = await FinnhubClient.getSymbols(keywords);
-    res.json(usExSymbols);
-});
+marketDataRouter.use(checkAuthentication());
 
-marketDataRouter.get('/company-profile-2/:symbol', async (req, res) => {
-    const companyProfile2 = await FinnhubClient.getCompanyProfile2(req.params.symbol);
-    res.json(companyProfile2);
-});
+marketDataRouter.get(
+    '/us-ex-symbols',
+    asyncHandlerWrapper(async (req) => {
+        const { keywords } = req.query;
+        const usExSymbols = await FinnhubClient.getSymbols(keywords);
+        return usExSymbols;
+    }),
+);
 
-marketDataRouter.get('/company-quote/:symbol', async (req, res) => {
-    const companyQuote = await FinnhubClient.getCompanyQuote(req.params.symbol);
-    res.json(companyQuote);
-})
+marketDataRouter.get(
+    '/company-profile-2/:symbol',
+    asyncHandlerWrapper(async (req) => {
+        const { symbol } = req.params;
+        const companyProfile2 = await FinnhubClient.getCompanyProfile2(symbol);
+        return companyProfile2;
+    }),
+);
 
-marketDataRouter.get('/company-news/:symbol', async (req, res) => {
-    const companyNews = await FinnhubClient.getCompanyNews(req.params.symbol);
-    res.json(companyNews); 
-});
+marketDataRouter.get(
+    '/company-quote/:symbol',
+    asyncHandlerWrapper(async (req) => {
+        const { symbol } = req.params;
+        const companyQuote = await FinnhubClient.getCompanyQuote(symbol);
+        return companyQuote;
+    })
+);
+
+marketDataRouter.get(
+    '/company-news/:symbol',
+    asyncHandlerWrapper(async (req) => {
+        const { symbol } = req.params;
+        const companyNews = await FinnhubClient.getCompanyNews(symbol);
+        return companyNews;
+    })
+);
 
 module.exports = {
     marketDataRouter
