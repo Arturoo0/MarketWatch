@@ -1,38 +1,62 @@
-require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
-const auth = require('./routes/auth.js');
-const marketData = require('./routes/marketData.js');
-const cors = require('cors')
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const app = express();
-const port = 3000;
 
-app.use(cors({
-  credentials: true,
-  origin: 'http://localhost:3001'
-}))
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json({}));
-app.use('/auth', auth.authRouter);
-app.use('/market-data', marketData.marketDataRouter);
+const auth = require('./routes/auth.js');
+const logger = require('./utils/logger');
+const config = require('./config');
+const marketData = require('./routes/marketData.js');
+const loggingMiddleware = require('./middleware/logging');
+const FinnHubClient = require('./services/finnhub-client');
 
-try {
-  mongoose.connect(process.env.DB_URI);
-}catch (error){
-  if (error !== undefined){
-    console.log('Error', 'Failed DB connection.');
-  }
+async function initCore() {
+    logger.info('Connecting to MongoDB cluster ...');
+    try {
+        await mongoose.connect(config.DB_URI);
+        logger.info('Connected to MongoDB cluster');
+    } catch (error) {
+        logger.error('Failed to connect to MongoDB cluster ...');
+            logger.error(error?.message);
+        process.exit(1);
+    }
+
+    logger.info('Pre-fetching symbols ...');
+    try {
+        await FinnHubClient.fetchSymbols();
+        logger.info('Successfully pre-fetched symbols');
+    } catch (error) {
+        logger.error('Failed to pre-fetch, resorting to lazy load ...');
+        logger.error(error.message);
+    }
 }
 
-app.get('/', (req, res) => {
-  res.send('Server is running.');
-})
+async function initApp() {
+    await initCore();
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+    const app = express();
+
+    app.use(cors({
+        credentials: true,
+        origin: config.FRONTEND_HOST,
+    }));
+    app.use(cookieParser());
+    app.use(express.urlencoded({
+        extended: true,
+    }));
+    app.use(express.json());
+    app.use(loggingMiddleware);
+    
+    app.use('/auth', auth.authRouter);
+    app.use('/market-data', marketData.marketDataRouter);
+
+    app.get('/', (req, res) => {
+        res.send('Server is running.');
+    })
+    
+    app.listen(config.PORT, () => {
+        logger.info(`Server listening at http://localhost:${config.PORT}`);
+    });
+}
+
+initApp();

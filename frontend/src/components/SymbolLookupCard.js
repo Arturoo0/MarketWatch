@@ -11,7 +11,7 @@ const cardStyle = {
 const SymbolLookupCard = (props) => {
     return (
         <div style={cardStyle}>
-            <Card style={{ width: '18rem' }}>
+            <Card className='shadow-sm' style={{ width: '18rem' }}>
                 <Card.Body>
                     <Card.Title>{props.data.symbol}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">{props.data.symbolType}</Card.Subtitle>
