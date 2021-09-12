@@ -2,6 +2,10 @@
 import { get } from '../utils/baseRequest';
 import { QuoteInfo } from '../components';
 import React, { useEffect, useState } from 'react'; 
+import { 
+    Spinner
+} from 'react-bootstrap'
+
 
 const companyViewContainerStyle = {
     padding: '4% 4%'
@@ -10,10 +14,22 @@ const companyViewContainerStyle = {
 const headerContainerStyle = {
     display: 'flex',
     justifyContent: 'space-between'
-}
+};
 
 const logoStyling = {
     height: '2em'
+};
+
+const loadingContainerStyle = {
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+
+const loaderStyle = {
+    height: '4rem',
+    width: '4rem'
 }
 
 const CompanyView = (props) => {
@@ -69,7 +85,11 @@ const CompanyView = (props) => {
         <div>
             {
                 companyData === null ?
-                <h3>No existing information</h3> 
+                <div style={loadingContainerStyle}>
+                    <Spinner style={loaderStyle} animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>
                 :
                 <div style={companyViewContainerStyle}>
                     <div style={headerContainerStyle}>

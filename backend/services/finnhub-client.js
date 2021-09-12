@@ -100,6 +100,17 @@ class FinnHubClient {
             }
         }; 
     }
+
+    async getCompanyNews(companySymbol){
+        const res = await this.makeExternalApiCall('/company-news', {
+            symbol: companySymbol
+        });
+        return {
+            companyNews : {
+                res
+            }
+        }
+    }
 }
 
 module.exports = new FinnHubClient({

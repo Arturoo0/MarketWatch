@@ -20,6 +20,11 @@ marketDataRouter.get('/company-quote/:symbol', async (req, res) => {
     res.json(companyQuote);
 })
 
+marketDataRouter.get('/company-news/:symbol', async (req, res) => {
+    const companyNews = await FinnhubClient.getCompanyNews(req.params.symbol);
+    res.json(companyNews); 
+});
+
 module.exports = {
     marketDataRouter
 }
