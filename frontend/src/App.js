@@ -2,6 +2,7 @@ import Authentication from './pages/Authentication';
 import Dashboard from './pages/Dashboard'; 
 import Add from './pages/Add';
 import SignedOut from './pages/SignedOut';
+import CompanyView from './pages/CompanyView';
 import { useEffect } from 'react';
 import { get } from './utils/baseRequest.js';
 import {
@@ -52,6 +53,9 @@ function App(props) {
         <div style={mainContent}>
           <Route path="/dashboard/add">
             <Add />
+          </Route>
+          <Route path="/dashboard/company">
+            <CompanyView /> 
           </Route>
         </div>
       </div>

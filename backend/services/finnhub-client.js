@@ -52,6 +52,65 @@ class FinnHubClient {
             US_EX_SYMBOLS: potentialMatches.slice(0, 50),
         };
     }
+
+    async getCompanyProfile2(companySymbol) {
+        const res = await this.makeExternalApiCall('/stock/profile2', {
+            symbol: companySymbol
+        });
+        return {
+            companyProfile2: res
+        };
+    }
+    
+    async getCompanyQuote(companySymbol) {
+        const res = await this.makeExternalApiCall('/quote', {
+            symbol: companySymbol
+        });
+        const {c,d,dp,h,l,o,pc} = res;
+        return {
+            companyQuote: {
+                currentPrice: {
+                    description: 'Current price',
+                    value: c
+                },
+                change: {
+                    description: 'Change',
+                    value: d
+                },
+                percentChange: {
+                    description: 'Percent change',
+                    value: dp
+                },
+                highPriceOfTheDay: {
+                    description: 'High price of the day',
+                    value: h
+                },
+                lowPriceOfTheDay : {
+                    description: 'Low price of the day',
+                    value: l
+                },
+                openPriceOfTheDay : {
+                    description: 'Open price of the day',
+                    value: o
+                },
+                previousClosingPriceOfTheDay : {
+                    description: 'Previous closing price of the day',
+                    value: pc
+                }
+            }
+        }; 
+    }
+
+    async getCompanyNews(companySymbol){
+        const res = await this.makeExternalApiCall('/company-news', {
+            symbol: companySymbol
+        });
+        return {
+            companyNews : {
+                res
+            }
+        }
+    }
 }
 
 module.exports = new FinnHubClient({
