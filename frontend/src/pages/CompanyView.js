@@ -16,7 +16,8 @@ const logoStyling = {
 }
 
 const quoteFigureStyling = {
-    display: 'inline-block'
+    listStyle: 'none',
+    padding: '0 0'
 }
 
 const CompanyView = (props) => {
@@ -65,17 +66,18 @@ const CompanyView = (props) => {
 
     const renderQuoteFigures = () => {
         if (quoteData === null) return null; 
+        console.log(quoteData);
         const {
-            c : currentPrice,
-            d : change,
-            dp: percentChange,
-            h: highPriceOfTheDay,
-            l: lowPriceOfTheDay,
-            o: openPriceOfTheDay,
-            pc: previousClosePrice
-        } = quoteData.data.companyQuote;
+            currentPrice,
+            change,
+            percentChange,
+            highPriceOfTheDay,
+            lowPriceOfTheDay,
+            openPriceOfTheDay,
+            previousClosePrice
+        } = quoteData.data;
         return (
-            <ul>
+            <ul style={quoteFigureStyling}>
                 <li>{`Current price: ${currentPrice}`}</li>
                 <li>{`Change: ${change}`}</li>
                 <li>{`Percent change: ${percentChange}%`}</li>
