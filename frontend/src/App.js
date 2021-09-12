@@ -1,15 +1,15 @@
-import Authentication from "./pages/Authentication";
-import Dashboard from "./pages/Dashboard"; 
-import Add from "./pages/Add";
-import SignedOut from "./pages/SignedOut";
-import { useEffect, useState } from "react";
+import Authentication from './pages/Authentication';
+import Dashboard from './pages/Dashboard'; 
+import Add from './pages/Add';
+import SignedOut from './pages/SignedOut';
+import { useEffect } from 'react';
 import { get } from './utils/baseRequest.js';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
-} from "react-router-dom";
+} from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const mainContent = {
   marginLeft: '200px',
@@ -17,12 +17,46 @@ const mainContent = {
   padding: '0px 10px'
 }
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  useEffect(async () => {
-    const authenticationRes = await get('/auth/is-valid-session', {});
-    setIsAuthenticated(authenticationRes.data.isValidSession);
-  }, []);
+const setAuthenticatedAction = (isAuthenticated) => {
+  return {
+    type: 'SET_AUTHENTICATED',
+    data: {
+      isAuthenticated,
+    }
+  }
+}
+
+function App(props) {
+  const { dispatch, checkingAuthentication, isAuthenticated } = props;
+
+  useEffect(() => {
+    async function authenticateUser() {
+      const { data } = await get('/auth/is-valid-session', {});
+      dispatch(setAuthenticatedAction(data.isAuthenticated));
+    }
+    authenticateUser();
+  }, [dispatch]);
+
+  function renderDashboard() {
+    if (checkingAuthentication) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      return <SignedOut />;
+    }
+    
+    return (
+      <div>
+        <Dashboard />
+        <div style={mainContent}>
+          <Route path="/dashboard/add">
+            <Add />
+          </Route>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -32,19 +66,7 @@ function App() {
             <Authentication />
           </Route>
           <Route path="/dashboard">
-            {
-              isAuthenticated ?
-              <div>
-                <Dashboard />
-                <div style={mainContent}>
-                  <Route path="/dashboard/add">
-                    <Add />
-                  </Route>
-                </div>
-              </div>
-              : 
-              <SignedOut />
-            }
+            {renderDashboard()}
           </Route>
         </Switch>
       </div>
@@ -52,4 +74,9 @@ function App() {
   );
 }
 
-export default App;
+function appMapStateToProps(state) {
+  const { isAuthenticated, checkingAuthentication } = state.app;
+  return { checkingAuthentication, isAuthenticated };
+}
+
+export default connect(appMapStateToProps)(App);

@@ -5,7 +5,6 @@ import {
     Card
 } from 'react-bootstrap';
 import {
-    get,
     post
 } from '../utils/baseRequest.js'
 
@@ -32,6 +31,8 @@ const pullFormData = async (credObj) => {
             break;
         case 400:
             alert(res.errRes.message)
+            break;
+        default:
             break;
     }
 }

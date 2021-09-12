@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const authRouter = express.Router();
 const User = require('../models/User.js');
 const Session = require('../models/Session.js');
+const logger = require('../utils/logger');
 
 const hashCred = async (cred) => {
     const saltRounds = 10;
@@ -44,7 +45,7 @@ authRouter.post('/login', async (req, res) => {
             });
         }
     }catch(error){
-        console.log('Error', error);
+        logger.error(error.message);
     }
 });
 
@@ -82,7 +83,7 @@ authRouter.get('/is-valid-session', async (req, res) => {
     const query = { sessionID: req.cookies['authSession']};
     const sessionExists = await Session.exists(query);
     return res.send({
-        'isValidSession': sessionExists 
+        isAuthenticated: sessionExists 
     });
 });
 

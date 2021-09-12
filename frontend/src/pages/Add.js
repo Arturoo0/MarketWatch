@@ -30,26 +30,28 @@ const Add = () => {
 
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    useEffect(async () => {
-        const searchQuery = {
-            keywords: searchTerm,
-        };
-        const queryString = new URLSearchParams(searchQuery).toString();
-        const response = await get(`/market-data/us-ex-symbols?${queryString}`);
-        const matchedSymbols = response.data;
-        setMatchedSymbols(matchedSymbols);
+    useEffect(() => {
+        async function searchForQuery() {
+            const searchQuery = {
+                keywords: debouncedSearchTerm,
+            };
+            const queryString = new URLSearchParams(searchQuery).toString();
+            const response = await get(`/market-data/us-ex-symbols?${queryString}`);
+            const matchedSymbols = response.data;
+            setMatchedSymbols(matchedSymbols);
+        }
+        searchForQuery();
     }, [debouncedSearchTerm]);
 
     const renderMatchedSymbols = () => {
-        const renderedCards = matchedSymbols?.US_EX_SYMBOLS?.map((symbol) =>
-            <Col><SymbolLookupCard data={
-                {
-                    symbol: symbol.displaySymbol,
-                    description: symbol.description,
-                    symbolType: symbol.type
-                }
-            }/></Col>
-        );
+        const renderedCards = matchedSymbols?.US_EX_SYMBOLS?.map((symbol) => {
+            const cardData = {
+                symbol: symbol.displaySymbol,
+                description: symbol.description,
+                symbolType: symbol.type
+            };
+            return (<Col key={symbol.displaySymbol}><SymbolLookupCard data={cardData}/></Col>);
+        });
         return renderedCards?.length > 0
             ? renderedCards
             : <div style={noMatchesTextStyle}>No securities match this query.</div>

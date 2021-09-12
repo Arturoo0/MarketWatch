@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { useHistory } from "react-router-dom";
-import { BsArrowRight, BsFillPersonFill } from "react-icons/bs";
+import { BsArrowRight, BsFillPersonFill } from 'react-icons/bs';
 
 const sidenavStyle = {
     height: '100%',
@@ -34,11 +33,12 @@ const handleLinkClick = (selector) => {
 }
 
 const generateSidePanelSelectors = (selectors) => {
-    const res = selectors.map((selector) => 
-        <a onClick={
+    const res = selectors.map((selector) => {
+        const path = `/dashboard/${selector}`
+        return (<a key={path} href={path} onClick={
             () => handleLinkClick(selector)
-        } style={dashSelectorStyle}>{selector} <BsArrowRight /></a>
-    );
+        } style={dashSelectorStyle}>{selector} <BsArrowRight /></a>);
+    });
     return res;
 };
 

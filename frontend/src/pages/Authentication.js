@@ -3,8 +3,7 @@ import React from 'react';
 import { SignupForm, LoginForm } from '../components';
 import { 
     Tabs,
-    Tab,
-    Card
+    Tab
 } from 'react-bootstrap';
 
 const containerStyle = {

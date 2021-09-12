@@ -1,15 +1,11 @@
 
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { 
     Form,
     Button,
     Card
 } from 'react-bootstrap';
-import {
-    get,
-    post
-} from '../utils/baseRequest.js'
+import { post } from '../utils/baseRequest.js'
 
 const cardStyle = {
     padding: '10px 25px'
@@ -32,11 +28,12 @@ const pullFormData = async (credObj) => {
         case 401:
             alert(res.errRes.message);
             break;
+        default:
+            break;
     }
 }
 
 const LoginForm = () => {
-    const [cookies, setCookie] = useCookies(['sessionID']);
     const [enteredEmail, updateEnteredEmail] = useState();
     const [enteredUsername, updateEnteredUsername] = useState();
     const [enteredPassword, updateEnteredPassword] = useState();

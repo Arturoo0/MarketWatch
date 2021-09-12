@@ -6,7 +6,7 @@ const baseReqPath = 'http://localhost:3000';
 
 const checkPassedEndpoint = (endpoint) => {
     if (endpoint === undefined){
-        throw 'No endpoint provided in get(endpoint: string) call'; 
+        throw new Error('No endpoint provided in get(endpoint: string) call'); 
     }
 }
 
