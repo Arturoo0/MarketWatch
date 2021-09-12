@@ -15,6 +15,10 @@ const logoStyling = {
     height: '2em'
 }
 
+const quoteFigureStyling = {
+    display: 'inline-block'
+}
+
 const CompanyView = (props) => {
     const [companyData, setCompanyData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
@@ -101,7 +105,9 @@ const CompanyView = (props) => {
                         </div>
                     </div>
                     <hr />
-                    {renderQuoteFigures()}
+                    <div>
+                        {renderQuoteFigures()}
+                    </div>
                 </div>
             }
         </div>
