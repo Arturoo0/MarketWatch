@@ -1,5 +1,8 @@
 
 import React from 'react';
+import { 
+    Badge
+} from 'react-bootstrap'
 
 const quoteLiStyling = {
     display: 'flex',
@@ -46,6 +49,7 @@ const QuoteInfo = (props) => {
             'openPriceOfTheDay',
             'previousClosingPriceOfTheDay'
         ];
+        
         const res = quoteOrder.map(key => {
                 return (  
                     <div>
@@ -54,7 +58,15 @@ const QuoteInfo = (props) => {
                                 {quoteRef[key].description}
                             </div>
                             <div style={liQuoteValueStyling}>
-                                {quoteRef[key].value}
+                                {
+                                    key === 'change' || key === 'percentChange'?                                        
+                                        quoteRef[key].value > 0 ?
+                                            <Badge bg='success'>{quoteRef[key].value}</Badge> 
+                                            :
+                                            <Badge bg='danger'>{quoteRef[key].value}</Badge>          
+                                        :
+                                        quoteRef[key].value                         
+                                }                                 
                             </div> 
                         </li>
                         <hr style={hrStyling}/>
