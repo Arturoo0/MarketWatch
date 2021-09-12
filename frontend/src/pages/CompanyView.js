@@ -112,6 +112,7 @@ const CompanyView = (props) => {
                         {renderQuoteFigures()}
                     </div>
                     <div>
+                        <hr/>
                         <RelatedNews news={companyNews}/>
                     </div>
                 </div>

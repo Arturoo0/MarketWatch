@@ -20,6 +20,9 @@ const cardBodyStyle = {
     margin: 'auto 0'
 };
 
+const newsContainerStyle = {
+}
+
 const RelatedNews = (props) => {
     const renderArticles = () => {
         if (props.news === null) return null;
@@ -58,7 +61,10 @@ const RelatedNews = (props) => {
 
     return (
         <div>
-            {renderArticles()}    
+            <div style={newsContainerStyle}>
+                <h3>Related news</h3>
+                {renderArticles()}    
+            </div>
         </div>
     );
 }
