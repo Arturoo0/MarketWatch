@@ -1,5 +1,6 @@
 
 import { get } from '../utils/baseRequest';
+import { QuoteInfo } from '../components';
 import React, { useEffect, useState } from 'react'; 
 
 const companyViewContainerStyle = {
@@ -13,11 +14,6 @@ const headerContainerStyle = {
 
 const logoStyling = {
     height: '2em'
-}
-
-const quoteFigureStyling = {
-    listStyle: 'none',
-    padding: '0 0'
 }
 
 const CompanyView = (props) => {
@@ -66,26 +62,7 @@ const CompanyView = (props) => {
 
     const renderQuoteFigures = () => {
         if (quoteData === null) return null; 
-        const {
-            currentPrice,
-            change,
-            percentChange,
-            highPriceOfTheDay,
-            lowPriceOfTheDay,
-            openPriceOfTheDay,
-            previousClosePrice
-        } = quoteData.data.companyQuote;
-        return (
-            <ul style={quoteFigureStyling}>
-                <li>{`Current price: ${currentPrice}`}</li>
-                <li>{`Change: ${change}`}</li>
-                <li>{`Percent change: ${percentChange}%`}</li>
-                <li>{`High price of the day: ${highPriceOfTheDay}`}</li>
-                <li>{`Low price of the day: ${lowPriceOfTheDay}`}</li>
-                <li>{`Open price of the day: ${openPriceOfTheDay}`}</li>
-                <li>{`Previous close price: ${previousClosePrice}`}</li>
-            </ul>
-        );
+        return <QuoteInfo quote={quoteData}/>;
     };
 
     return (   
