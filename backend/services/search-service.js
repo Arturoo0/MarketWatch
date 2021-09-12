@@ -28,8 +28,8 @@ class DocumentMatchData {
 }
 
 function tokenizeAndNormalize(blob) {
-    const tokens = words(blob)
-        .map((token) => token.toLowerCase())
+    const lowerCasedBlob = blob.toLowerCase();
+    const tokens = words(lowerCasedBlob)
         .map((token) => token.replace(/[^0-9a-zA-Z]/giu, ''))
         .map((token) => porter(token));
     return tokens;
