@@ -49,14 +49,16 @@ const CompanyView = (props) => {
         };  
         const symbol = pullTickerFromURL();
         if (symbol !== null){
-            const companyProfileResourceLocation = `/market-data/company-profile-2/${symbol}`
-            const companyQuoteResourceLocation = `/market-data/company-quote/${symbol}` 
-            const companyNewsResourceLocation = `/market-data/company-news/${symbol}` 
-
-            const profile = await get(companyProfileResourceLocation, {});
-            const quote = await get(companyQuoteResourceLocation, {});
-            const news = await get(companyNewsResourceLocation, {});
-
+            const endpoints = [
+                `/market-data/company-profile-2/${symbol}`,
+                `/market-data/company-quote/${symbol}`,
+                `/market-data/company-news/${symbol}`
+            ];
+            const [profile, quote, news] = await Promise.all(
+                endpoints.map((endpoint) => {
+                    return get(endpoint, {});
+                })
+            );
             setCompanyData(profile);
             setQuoteData(quote);
             setCompanyNews(news);
