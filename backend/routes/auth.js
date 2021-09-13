@@ -1,10 +1,14 @@
+const joi = require('joi');
+const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const zxcvbn = require('zxcvbn');
 const express = require('express');
+
 const User = require('../models/User.js');
 const Session = require('../models/Session.js');
-const { asyncHandlerWrapper } = require('../utils/apiUtils.js');
-const { UnauthorizedError, ConflictError } = require('../utils/errors.js');
+const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils.js');
+const { UnauthorizedError, ConflictError, InvalidRequestError } = require('../utils/errors.js');
 
 const authRouter = express.Router();
 
@@ -21,8 +25,23 @@ const addSessionCookie = async (email, res) => {
     res.cookie('session-id', sessionID);
 }
 
+const credentialsValidationHandler = requestValidation({
+    body: {
+        email: joi.string()
+            .email()
+            .required(),
+        username: joi.string()
+            .alphanum()
+            .min(3)
+            .max(20)
+            .required(),
+        password: joi.string().required(),
+    },
+});
+
 authRouter.post(
     '/login',
+    credentialsValidationHandler,
     asyncHandlerWrapper(
         async (req, res) => {
             const { email, username, password } = req.body;
@@ -32,10 +51,8 @@ authRouter.post(
                     userMessage: 'There is no account registered with this email.'
                 });
             }
-            const [usernamesMatch, passwordsMatch] = await Promise.all([
-                bcrypt.compare(username, user.username),
-                bcrypt.compare(password, user.password),
-            ]);
+            const usernamesMatch = username === user.username;
+            const passwordsMatch = await bcrypt.compare(password, user.password);
             if (!usernamesMatch || !passwordsMatch) {
                 throw new UnauthorizedError({
                     userMessage: 'Invalid credentials.'
@@ -51,22 +68,37 @@ authRouter.post(
 
 authRouter.post(
     '/sign-up',
+    credentialsValidationHandler,
     asyncHandlerWrapper(
         async (req, res) => {
             const { email, username, password } = req.body;
-            const userExists = await User.exists({ email });
-            if (userExists) {
+            const passwordAnalysis = zxcvbn(password, [email, username]);
+            if (passwordAnalysis.score < 3) {
+                const passwordSuggestion = _.get(
+                    passwordAnalysis,
+                    'feedback.suggestions[0]',
+                    'Please try another password.'
+                );
+                throw new InvalidRequestError({
+                    userMessage: `Weak password: ${passwordSuggestion}`,
+                });
+            }
+            const userEmailExists = await User.exists({ email });
+            if (userEmailExists) {
                 throw new ConflictError({
                     userMessage: 'This email is already associated with a registered account.'
                 });
             }
-            const [hashedUsername, hashedPassword] = await Promise.all([
-                hash(username),
-                hash(password),
-            ]);
+            const usernameExists = await User.exists({ username });
+            if (usernameExists) {
+                throw new ConflictError({
+                    userMessage: 'This username is not available.'
+                });
+            }
+            const hashedPassword = await hash(password);
             const user = new User({
                 email,
-                username: hashedUsername,
+                username,
                 password: hashedPassword,
             });
             await user.save();
@@ -77,7 +109,7 @@ authRouter.post(
             };
         }
     )
-); 
+);
 
 authRouter.get('/is-valid-session', async (req, res) => {
     const query = { sessionID: req.cookies['session-id'] };
