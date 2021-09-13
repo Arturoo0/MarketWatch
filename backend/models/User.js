@@ -12,7 +12,17 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    banned: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
+    isAdmin: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
 });
 
 module.exports = mongoose.model('User', UserSchema);
