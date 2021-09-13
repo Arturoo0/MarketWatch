@@ -1,3 +1,6 @@
+const joi = require('joi');
+const _ = require('lodash');
+const { InvalidRequestError } = require('../utils/errors.js');
 
 /**
  * Any routes that use an async handler function should wrap the handler with this function.
@@ -29,7 +32,30 @@ function asyncMiddlewareWrapper(middleware) {
     }
 }
 
+function requestValidation(validationOptions) {
+    const baseValidationOptions = {
+        params: validationOptions.params || {},
+        body: validationOptions.body || {},
+        query: validationOptions.query || {},
+    };
+    return (req, res, next) => {
+        _.each(baseValidationOptions, (schema, key) => {
+            const validationSchema = joi.object().keys(schema);
+            const { error } = validationSchema.validate(_.get(req, key, {}));
+            if (error) {
+                const errorMessage = error.details[0].message;
+                throw new InvalidRequestError({
+                    message: `Error validating request's ${key}: ${errorMessage}`,
+                    userMessage: errorMessage,
+                });
+            }
+        });
+        next();
+    };
+}
+
 module.exports = {
     asyncHandlerWrapper,
-    asyncMiddlewareWrapper
+    asyncMiddlewareWrapper,
+    requestValidation,
 }
