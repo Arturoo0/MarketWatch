@@ -8,6 +8,14 @@ const cardStyle = {
     padding: '15px 5px 15px 0'
 }
 
+const handleViewClick = (e, symbol) => {
+    e.preventDefault();
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('symbol', symbol);
+    const newPath = `/dashboard/company?` + searchParams.toString(); 
+    window.location = newPath;
+};
+
 const SymbolLookupCard = (props) => {
     return (
         <div style={cardStyle}>
@@ -18,7 +26,9 @@ const SymbolLookupCard = (props) => {
                     <Card.Text>
                         {props.data.description}
                     </Card.Text>
-                    <Card.Link href="#"><Button>View more</Button></Card.Link>
+                    <Card.Link>
+                        <Button onClick={(e) => handleViewClick(e, props.data.symbol)}>View more</Button>
+                    </Card.Link>
                 </Card.Body>
             </Card>
         </div>
