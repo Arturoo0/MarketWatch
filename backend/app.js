@@ -11,6 +11,7 @@ const marketData = require('./routes/marketData.js');
 const loggingMiddleware = require('./middleware/logging');
 const errorHandlingMiddleware = require('./middleware/errorHandler');
 const FinnHubClient = require('./services/finnhub-client');
+const MetricsService = require('./services/metrics-service.js');
 
 const APP_START_TIME = Date.now();
 
@@ -58,6 +59,7 @@ async function initApp() {
     app.get('/status', (req, res) => {
         const statusData = {
             uptime: Date.now() - APP_START_TIME,
+            ...MetricsService.getMetricsSummary(),
         };
         res.json(statusData);
     });
