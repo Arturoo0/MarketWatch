@@ -107,7 +107,6 @@ authRouter.post(
                 portfolios: [defaultPortfolio._id],
             });
             await user.save();
-            console.log(user, defaultPortfolio);
             await addSessionCookie(email, res);
             res.status(201);
             return {
