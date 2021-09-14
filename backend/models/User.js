@@ -21,7 +21,7 @@ const UserSchema = mongoose.Schema({
     creationDate: {
         type: Number,
         required: true,
-        default: Date.now(),
+        default: Date.now,
     },
     banned: {
         type: Boolean,

@@ -26,12 +26,12 @@ const PortfolioSchema = mongoose.Schema({
     creationDate: {
         type: Number,
         required: false,
-        default: Date.now(),
+        default: Date.now,
     },
     lastEditedDate: {
         type: Number,
         required: false,
-        default: Date.now(),
+        default: Date.now,
     },
     securities: {
         type: [String],
