@@ -6,6 +6,7 @@ function contextMiddleware() {
             requestId: uuidv4(),
             user: {
                 id: null,
+                sessionId: null,
             },
         };
         next();
