@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const SessionSchema = mongoose.Schema({
     sessionID: {
         type: String,
-        required: true 
+        required: true,
     },
-    email: {
+    userId: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 });
 
 module.exports = {

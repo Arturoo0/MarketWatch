@@ -5,7 +5,7 @@ import { get } from '../utils/baseRequest';
 import { useDebounce } from '../utils/utils';
 import { Row, Col } from 'react-bootstrap';
 
-const addContainerStyle = {
+const securitiesContainerStyle = {
     padding: '10px 10px',
     height: '100vh',
 };
@@ -24,7 +24,7 @@ const titleStyle = {
     marginBottom: '2rem',
 }
 
-const Add = () => {
+const Securities = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [matchedSymbols, setMatchedSymbols] = useState({});
 
@@ -58,7 +58,7 @@ const Add = () => {
     }
 
     return (
-        <div style={addContainerStyle}>
+        <div style={securitiesContainerStyle}>
             <h2 style={titleStyle}>Securities</h2>
             <Search onChangeHandle={(text) => {setSearchTerm(text)}}/>
             <Row style={symbolContainerStyle}>
@@ -68,4 +68,4 @@ const Add = () => {
     );
 };
 
-export default Add;
+export default Securities;

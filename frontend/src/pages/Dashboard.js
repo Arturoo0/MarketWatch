@@ -29,12 +29,12 @@ const dashSelectorStyle = {
 }
 
 const handleLinkClick = (selector) => {
-    window.location.pathname = `/dashboard/${selector}`;
+    window.location.pathname = `/dashboard/${selector.toLowerCase()}`;
 }
 
 const generateSidePanelSelectors = (selectors) => {
     const res = selectors.map((selector) => {
-        const path = `/dashboard/${selector}`
+        const path = `/dashboard/${selector.toLowerCase()}`
         return (<a key={path} href={path} onClick={
             () => handleLinkClick(selector)
         } style={dashSelectorStyle}>{selector} <BsArrowRight /></a>);
@@ -50,8 +50,8 @@ const Dashboard = (page) => {
                 {
                     generateSidePanelSelectors(
                         [
-                            'View',
-                            'Add'
+                            'Portfolios',
+                            'Securities'
                         ]
                     )
                 }

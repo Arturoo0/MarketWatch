@@ -8,10 +8,10 @@ const auth = require('./routes/auth.js');
 const logger = require('./utils/logger');
 const config = require('./config');
 const marketData = require('./routes/marketData.js');
-const loggingMiddleware = require('./middleware/logging');
-const errorHandlingMiddleware = require('./middleware/errorHandler');
+const middleware = require('./middleware');
 const FinnHubClient = require('./services/finnhub-client');
 const MetricsService = require('./services/metrics-service.js');
+const usersRouter = require('./routes/users.js');
 
 const APP_START_TIME = Date.now();
 
@@ -51,10 +51,12 @@ async function initApp() {
         extended: true,
     }));
     app.use(express.json());
-    app.use(loggingMiddleware);
+    app.use(middleware.contextMiddleware());
+    app.use(middleware.loggingMiddleware());
     
     app.use('/auth', auth.authRouter);
     app.use('/market-data', marketData.marketDataRouter);
+    app.use('/users', usersRouter.usersRouter);
 
     app.get('/status', (req, res) => {
         const statusData = {
@@ -64,7 +66,7 @@ async function initApp() {
         res.json(statusData);
     });
 
-    app.use(errorHandlingMiddleware);
+    app.use(middleware.errorHandlingMiddleware());
     
     app.listen(config.PORT, () => {
         logger.info(`Server listening at http://localhost:${config.PORT}`);
