@@ -138,8 +138,13 @@ class FinnHubClient {
             symbol: _symbol
         }); 
         const metrics = res.metric;
+        console.log(res);
         return {
-            basicCompanyFinancials : {
+            basicCompanyFinancials: {
+                beta: {
+                    description: 'Beta',
+                    value: metrics.beta
+                },
                 marketCapitalization: {
                     description: 'Market Capitalization',
                     value: metrics.marketCapitalization

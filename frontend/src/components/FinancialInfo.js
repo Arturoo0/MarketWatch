@@ -11,7 +11,8 @@ const liFinancialDescriptionStyling = {
 };
 
 const liFinancialValueStyling = {
-    fontWeight: '600'
+    fontWeight: '600',
+    whiteSpace: 'nowrap'
 };
 
 const hrStyling = {
@@ -24,8 +25,9 @@ const financialFigureStyling = {
     width: '400px'
 };
 
-const noWrap = {
-    whiteSpace: 'nowrap'
+const decreaseText = {
+    fontSize: '1rem',
+    fontWeight: '600'
 }
 
 const FinancialInfo = (props) => {
@@ -35,7 +37,8 @@ const FinancialInfo = (props) => {
             'marketCapitalization',
             'fiftyTwoWeekRange',
             'fiftyTwoWeekLowHighDates',
-            'currentDividendYield'
+            'currentDividendYield',
+            'beta'
         ]
         const metrics = props.financials.data.basicCompanyFinancials;
         const res = financialOrder.map(figure =>
@@ -46,7 +49,7 @@ const FinancialInfo = (props) => {
                     </div>
                     {
                         figure === 'fiftyTwoWeekLowHighDates' ?
-                        <div style={{...liFinancialValueStyling, ...noWrap}}>
+                        <div style={{liFinancialValueStyling, ...decreaseText}}>
                             {metrics[figure].value}        
                         </div>
                         :
@@ -55,7 +58,7 @@ const FinancialInfo = (props) => {
                         </div>
                     }
                 </li>
-                <hr/> 
+                <hr style={hrStyling}/> 
             </div>
         );
         return res; 
