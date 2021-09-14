@@ -33,8 +33,9 @@ const loaderStyle = {
 
 const quoteAndCandleContainer = {
     display: 'flex',
-    justifyContent: 'space-between'
-};
+    justifyContent: 'space-between', 
+    flexWrap: 'wrap'
+}; 
 
 const CompanyView = (props) => {
     const [companyData, setCompanyData] = useState(null);
@@ -73,7 +74,7 @@ const CompanyView = (props) => {
             setQuoteData(quote);
             setCompanyNews(news);
             setCandleData(candles);
-            setFinancialData(financialData);
+            setFinancialData(financials);
         }
     }, []);
 
@@ -124,13 +125,13 @@ const CompanyView = (props) => {
                     <hr />
                     <div style={quoteAndCandleContainer}>
                         {renderQuoteFigures()}
+                        <FinancialInfo financials={financialData}/>
                         <CandlestickCompanyView candles={candleData}/>
                     </div>
                     <div>
                         <hr/>
                         <RelatedNews news={companyNews}/>
                     </div>
-                    <FinancialInfo />
                 </div>
             }
         </div>

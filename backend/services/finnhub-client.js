@@ -144,15 +144,15 @@ class FinnHubClient {
                     description: 'Market Capitalization',
                     value: metrics.marketCapitalization
                 },
-                FiftyTwoWeekRange: {
+                fiftyTwoWeekRange: {
                     description: '52 week low-high',
                     value: `${metrics['52WeekLow']} - ${metrics['52WeekHigh']}`
                 }, 
-                FiftyTwoWeekLowHighDates : {
-                    description: '52 week low-high dates',
+                fiftyTwoWeekLowHighDates : {
+                    description: '52 low-high dates',
                     value: `${metrics['52WeekLowDate']} - ${metrics['52WeekHighDate']}`
                 }, 
-                CurrentDividendYield: {
+                currentDividendYield: {
                     description: 'Dividend % yield',
                     value: `${metrics.currentDividendYieldTTM}`
                 }

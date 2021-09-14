@@ -14,33 +14,56 @@ const liFinancialValueStyling = {
     fontWeight: '600'
 };
 
+const hrStyling = {
+    margin: '8px 0'
+}
+
+const financialFigureStyling = {
+    listStyle: 'none',
+    padding: '0 0',
+    width: '400px'
+};
+
+const noWrap = {
+    whiteSpace: 'nowrap'
+}
+
 const FinancialInfo = (props) => {
     const generateFinancialsBlock = () => {
+        if (props.financials === null || props.financials === undefined) return null;
         const financialOrder = [
             'marketCapitalization',
-            '52WeekHigh',
-            '52WeekHighDate',
-            '52WeekLow',
-            '52WeekLowDate',
-            'currentDividendYieldTTM'
-        ];
-
+            'fiftyTwoWeekRange',
+            'fiftyTwoWeekLowHighDates',
+            'currentDividendYield'
+        ]
+        const metrics = props.financials.data.basicCompanyFinancials;
         const res = financialOrder.map(figure =>
-            <li style={financialLiStyling}>
-                <div style={liFinancialDescriptionStyling}>
-                    {figure}
-                </div>
-                <div style={liFinancialValueStyling}>
-                    {'hehe'}        
-                </div>
-            </li>
+            <div>
+                <li style={financialLiStyling}>
+                    <div style={liFinancialDescriptionStyling}>
+                        {metrics[figure].description}
+                    </div>
+                    {
+                        figure === 'fiftyTwoWeekLowHighDates' ?
+                        <div style={{...liFinancialValueStyling, ...noWrap}}>
+                            {metrics[figure].value}        
+                        </div>
+                        :
+                        <div style={liFinancialValueStyling}>
+                            {metrics[figure].value}        
+                        </div>
+                    }
+                </li>
+                <hr/> 
+            </div>
         );
         return res; 
     }; 
 
     return (  
         <div>
-            <ul>
+            <ul style={financialFigureStyling}>
                 {generateFinancialsBlock()}
             </ul>
         </div>
