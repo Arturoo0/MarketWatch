@@ -10,6 +10,7 @@ const { Session } = require('../models/Session.js');
 const { Portfolio } = require('../models/Portfolio.js');
 const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils.js');
 const { UnauthorizedError, ConflictError, InvalidRequestError } = require('../utils/errors.js');
+const checkAuthentication = require('../middleware/authentication.js');
 
 const authRouter = express.Router();
 
@@ -18,12 +19,14 @@ const hash = async (cred) => {
     return await bcrypt.hash(cred, saltRounds);
 }
 
+const SESSION_ID_COOKIE_NAME = 'session-id';
+
 const addSessionCookie = async (userId, res) => {
-    const sessionID = crypto.randomBytes(16).toString('base64');
-    const session = new Session({ userId, sessionID });
+    const sessionId = crypto.randomBytes(16).toString('base64');
+    const session = new Session({ userId, sessionId });
     await session.save();
     res.header('Access-Control-Allow-Credentials', true);
-    res.cookie('session-id', sessionID);
+    res.cookie(SESSION_ID_COOKIE_NAME, sessionId);
 }
 
 const credentialsValidationHandler = requestValidation({
@@ -65,6 +68,19 @@ authRouter.post(
             };
         }
     )
+);
+
+authRouter.post(
+    '/logout',
+    checkAuthentication(),
+    asyncHandlerWrapper(
+        async (req, res) => {
+            const sessionId = req.context.user.sessionId;
+            await Session.deleteOne({ sessionId });
+            res.clearCookie(SESSION_ID_COOKIE_NAME);
+            res.sendStatus(200);
+        }
+    ),
 );
 
 authRouter.post(
@@ -116,7 +132,7 @@ authRouter.post(
 );
 
 authRouter.get('/is-valid-session', async (req, res) => {
-    const query = { sessionID: req.cookies['session-id'] };
+    const query = { sessionId: req.cookies['session-id'] };
     const sessionExists = await Session.exists(query);
     return res.send({
         isAuthenticated: sessionExists 

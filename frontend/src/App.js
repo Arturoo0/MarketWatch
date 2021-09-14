@@ -12,6 +12,7 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAuthenticatedAction } from './actions/authenticationActions.js';
+import Portfolios from './pages/Portfolios';
 
 const mainContent = {
   marginLeft: '200px',
@@ -48,6 +49,9 @@ function App(props) {
           </Route>
           <Route path="/dashboard/company">
             <CompanyView /> 
+          </Route>
+          <Route path="/dashboard/portfolios">
+            <Portfolios /> 
           </Route>
         </div>
       </div>
