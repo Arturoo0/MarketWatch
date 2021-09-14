@@ -6,7 +6,6 @@ import {
     Spinner
 } from 'react-bootstrap'
 
-
 const companyViewContainerStyle = {
     padding: '4% 4%'
 };
@@ -32,10 +31,16 @@ const loaderStyle = {
     width: '4rem'
 }
 
+const quoteAndCandleContainer = {
+    display: 'flex',
+    justifyContent: 'space-between'
+};
+
 const CompanyView = (props) => {
     const [companyData, setCompanyData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
     const [companyNews, setCompanyNews] = useState(null);
+    const [candleData, setCandleData] = useState(null);
     useEffect(async () => {
         const pullTickerFromURL = () => {
             const windowUrl = window.location.search;
@@ -49,12 +54,15 @@ const CompanyView = (props) => {
         };  
         const symbol = pullTickerFromURL();
         if (symbol !== null){
+            const currentUnixTime = Math.floor(Date.now() / 1000); 
+            const oneYearBack = currentUnixTime - 31536000;
             const endpoints = [
                 `/market-data/company-profile-2/${symbol}`,
                 `/market-data/company-quote/${symbol}`,
-                `/market-data/company-news/${symbol}`
+                `/market-data/company-news/${symbol}`,
+                `/market-data/company-candles/${symbol}/${'1'}/${1615298999}/${1615302599}`, 
             ];
-            const [profile, quote, news] = await Promise.all(
+            const [profile, quote, news, candles] = await Promise.all(
                 endpoints.map((endpoint) => {
                     return get(endpoint, {});
                 })
@@ -62,6 +70,7 @@ const CompanyView = (props) => {
             setCompanyData(profile);
             setQuoteData(quote);
             setCompanyNews(news);
+            setCandleData(candles);
         }
     }, []);
 
@@ -110,14 +119,14 @@ const CompanyView = (props) => {
                         </div>
                     </div>
                     <hr />
-                    <div>
+                    <div style={quoteAndCandleContainer}>
                         {renderQuoteFigures()}
+                        <CandlestickCompanyView candles={candleData}/>
                     </div>
                     <div>
                         <hr/>
                         <RelatedNews news={companyNews}/>
                     </div>
-                    <CandlestickCompanyView />
                 </div>
             }
         </div>
