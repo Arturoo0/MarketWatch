@@ -62,6 +62,17 @@ marketDataRouter.get(
     })
 );
 
+marketDataRouter.get(
+    '/company-basic-financials/:symbol',
+    asyncHandlerWrapper(async (req) => {
+        const { symbol } = req.params;
+        const financials = await FinnhubClient.getBasicCompanyFinancials(
+            symbol
+        );
+        return financials;
+    })
+);
+
 module.exports = {
     marketDataRouter
 }

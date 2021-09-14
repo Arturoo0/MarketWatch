@@ -132,6 +132,45 @@ class FinnHubClient {
             }
         }
     }
+
+    async getBasicCompanyFinancials(_symbol){
+        const res = await this.makeExternalApiCall('/stock/metric', {
+            symbol: _symbol
+        }); 
+        const metrics = res.metric;
+        return {
+            basicCompanyFinancials: {
+                beta: {
+                    description: 'Beta',
+                    value: metrics.beta
+                },
+                marketCapitalization: {
+                    description: 'Market Capitalization',
+                    value: metrics.marketCapitalization
+                },
+                fiftyTwoWeekRange: {
+                    description: '52 week low-high',
+                    value: `${metrics['52WeekLow']} - ${metrics['52WeekHigh']}`
+                }, 
+                fiftyTwoWeekLowHighDates : {
+                    description: '52 low-high dates',
+                    value: `${metrics['52WeekLowDate']} | ${metrics['52WeekHighDate']}`
+                }, 
+                currentDividendYield: {
+                    description: 'Dividend % yield',
+                    value: `${metrics.currentDividendYieldTTM}`
+                },
+                tenDayAverageTradingVolume: {
+                    description: '10 day avg volume',
+                    value: `${metrics['10DayAverageTradingVolume']}`
+                },
+                threeMonthAverageTradingVolume: {
+                    description: '12 week avg volume',
+                    value: `${metrics['3MonthAverageTradingVolume']}`
+                }
+            }
+        }
+    };
 }
 
 module.exports = new FinnHubClient({
