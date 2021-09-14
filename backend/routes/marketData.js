@@ -5,7 +5,7 @@ const { asyncHandlerWrapper } = require('../utils/apiUtils');
 
 const marketDataRouter = express.Router();
 
-marketDataRouter.use(checkAuthentication());
+// marketDataRouter.use(checkAuthentication());
 
 marketDataRouter.get(
     '/us-ex-symbols',

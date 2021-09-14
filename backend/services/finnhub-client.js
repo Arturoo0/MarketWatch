@@ -137,9 +137,25 @@ class FinnHubClient {
         const res = await this.makeExternalApiCall('/stock/metric', {
             symbol: _symbol
         }); 
+        const metrics = res.metric;
         return {
             basicCompanyFinancials : {
-                res
+                marketCapitalization: {
+                    description: 'Market Capitalization',
+                    value: metrics.marketCapitalization
+                },
+                FiftyTwoWeekRange: {
+                    description: '52 week low-high',
+                    value: `${metrics['52WeekLow']} - ${metrics['52WeekHigh']}`
+                }, 
+                FiftyTwoWeekLowHighDates : {
+                    description: '52 week low-high dates',
+                    value: `${metrics['52WeekLowDate']} - ${metrics['52WeekHighDate']}`
+                }, 
+                CurrentDividendYield: {
+                    description: 'Dividend % yield',
+                    value: `${metrics.currentDividendYieldTTM}`
+                }
             }
         }
     };
