@@ -14,7 +14,7 @@ const SecurityTransactionSchema = mongoose.Schema({
     dateOfTransaction: {
         type: Number,
         required: false,
-        default: Date.now(),
+        default: Date.now,
     },
     transactionType: {
         type: String,
