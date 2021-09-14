@@ -1,6 +1,6 @@
 
 import { get } from '../utils/baseRequest';
-import { QuoteInfo, RelatedNews } from '../components';
+import { QuoteInfo, RelatedNews, CandlestickCompanyView } from '../components';
 import React, { useEffect, useState } from 'react'; 
 import { 
     Spinner
@@ -117,6 +117,7 @@ const CompanyView = (props) => {
                         <hr/>
                         <RelatedNews news={companyNews}/>
                     </div>
+                    <CandlestickCompanyView />
                 </div>
             }
         </div>
