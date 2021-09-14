@@ -60,7 +60,7 @@ const CompanyView = (props) => {
                 `/market-data/company-profile-2/${symbol}`,
                 `/market-data/company-quote/${symbol}`,
                 `/market-data/company-news/${symbol}`,
-                `/market-data/company-candles/${symbol}/${'1'}/${1615298999}/${1615302599}`, 
+                `/market-data/company-candles/${symbol}/${'D'}/${oneYearBack}/${currentUnixTime}`, 
             ];
             const [profile, quote, news, candles] = await Promise.all(
                 endpoints.map((endpoint) => {

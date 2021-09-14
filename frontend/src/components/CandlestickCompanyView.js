@@ -27,7 +27,7 @@ const CandlestickCompanyView = (props) => {
             v
         } = props.candles.data.candles.res;
         let series = [];
-        for (let pos = 0; pos < c.length; pos++){
+        for (let pos = 0; pos < t.length; pos++){
             series.push({
                 x: new Date(t[pos]),
                 y: [o[pos], l[pos], h[pos], c[pos]]
@@ -46,7 +46,7 @@ const CandlestickCompanyView = (props) => {
                     series={shapedData} 
                     type='candlestick' 
                     width={500} 
-                    height={320} 
+                    height={335} 
                 /> 
             </div>
         );
