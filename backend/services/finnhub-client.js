@@ -119,9 +119,16 @@ class FinnHubClient {
             from: _from,
             to: _to
         });
+        const {c,h,l,o,s,t,v} = res;
         return {
             candles : {
-                res
+                closePrice: c,
+                highPrice: h,
+                lowPrice: l,
+                openPrice: o,
+                responseStatus: s,
+                timestamp: t,
+                volume: v 
             }
         }
     }

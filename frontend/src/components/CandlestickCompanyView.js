@@ -18,19 +18,19 @@ const CandlestickCompanyView = (props) => {
 
     const shapePassedCandleData = (props) => {
         const {
-            c,
-            h,
-            l,
-            o,
-            s,
-            t,
-            v
-        } = props.candles.data.candles.res;
+            closePrice,
+            highPrice,
+            lowPrice,
+            openPrice,
+            responseStatus,
+            timestamp,
+            volume 
+        } = props.candles.data.candles;
         let series = [];
-        for (let pos = 0; pos < t.length; pos++){
+        for (let pos = 0; pos < timestamp.length; pos++){
             series.push({
-                x: new Date(t[pos]),
-                y: [o[pos], l[pos], h[pos], c[pos]]
+                x: new Date(timestamp[pos]),
+                y: [openPrice[pos], lowPrice[pos], highPrice[pos], closePrice[pos]]
             });
         }
         return [{data: series}]
