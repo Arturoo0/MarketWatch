@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 const UserSchema = mongoose.Schema({
+    _id: {
+        type: String,
+        default: uuidv4,
+    },
     email: {
         type: String,
         required: true 
@@ -13,6 +18,11 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    creationDate: {
+        type: Number,
+        required: true,
+        default: Date.now(),
+    },
     banned: {
         type: Boolean,
         required: true,
@@ -23,6 +33,14 @@ const UserSchema = mongoose.Schema({
         required: true,
         default: false,
     },
+    portfolios: {
+        type: [String],
+        required: true,
+        default: [],
+    },
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = {
+    UserSchema,
+    User: mongoose.model('User', UserSchema),
+};

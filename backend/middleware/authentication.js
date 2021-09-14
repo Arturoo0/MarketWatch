@@ -1,4 +1,4 @@
-const Session = require('../models/Session.js');
+const { Session } = require('../models/Session.js');
 const { asyncMiddlewareWrapper } = require('../utils/apiUtils.js');
 const { UnauthorizedError } = require('../utils/errors.js');
 

@@ -5,8 +5,9 @@ const crypto = require('crypto');
 const zxcvbn = require('zxcvbn');
 const express = require('express');
 
-const User = require('../models/User.js');
-const Session = require('../models/Session.js');
+const { User } = require('../models/User.js');
+const { Session } = require('../models/Session.js');
+const { Portfolio } = require('../models/Portfolio.js');
 const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils.js');
 const { UnauthorizedError, ConflictError, InvalidRequestError } = require('../utils/errors.js');
 
@@ -95,11 +96,14 @@ authRouter.post(
                     userMessage: 'This username is not available.'
                 });
             }
+            const defaultPortfolio = new Portfolio();
+            await defaultPortfolio.save();
             const hashedPassword = await hash(password);
             const user = new User({
                 email,
                 username,
                 password: hashedPassword,
+                portfolios: [defaultPortfolio._id],
             });
             await user.save();
             await addSessionCookie(email, res);
