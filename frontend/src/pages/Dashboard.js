@@ -1,6 +1,10 @@
 
 import React from 'react';
-import { BsArrowRight, BsFillPersonFill } from 'react-icons/bs';
+import { connect } from 'react-redux';
+import { BsArrowRight, BsFillPersonFill, BsArrowBarRight } from 'react-icons/bs';
+import { Button } from 'react-bootstrap';
+import { post } from '../utils/baseRequest';
+import { setAuthenticatedAction } from '../actions/authenticationActions.js';
 
 const sidenavStyle = {
     height: '100%',
@@ -28,6 +32,13 @@ const dashSelectorStyle = {
     outline: 'none'
 }
 
+const logoutButtonStyle = {
+    position: 'absolute',
+    bottom: '1%',
+    left: '50%',
+    transform: 'translateX(-50%)',
+}
+
 const handleLinkClick = (selector) => {
     window.location.pathname = `/dashboard/${selector.toLowerCase()}`;
 }
@@ -42,7 +53,14 @@ const generateSidePanelSelectors = (selectors) => {
     return res;
 };
 
-const Dashboard = (page) => {
+const Dashboard = (props) => {
+    const { dispatch } = props;
+
+    const logoutOnClick = async () => {
+        await post('/auth/logout');
+        dispatch(setAuthenticatedAction(false));
+    }
+
     return (
         <div>
             <div style={sidenavStyle}>
@@ -55,9 +73,13 @@ const Dashboard = (page) => {
                         ]
                     )
                 }
+                <Button onClick={logoutOnClick} style={logoutButtonStyle} className='btn-dark'>
+                    Logout
+                    <BsArrowBarRight style={{ marginLeft: '5px' }} />
+                </Button>
             </div>
         </div>
     );
 };
 
-export default Dashboard;
+export default connect()(Dashboard);
