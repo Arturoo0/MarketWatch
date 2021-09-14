@@ -43,6 +43,25 @@ marketDataRouter.get(
     })
 );
 
+marketDataRouter.get(
+    '/company-candles/:symbol/:resolution/:from/:to',
+    asyncHandlerWrapper(async (req) => {
+        const { 
+            symbol,
+            resolution,
+            from,
+            to
+        } = req.params;
+        const candles = await FinnhubClient.getCompanyCandles(
+            symbol,
+            resolution,
+            from, 
+            to
+        );
+        return candles;
+    })
+);
+
 module.exports = {
     marketDataRouter
 }

@@ -111,6 +111,27 @@ class FinnHubClient {
             }
         }
     }
+
+    async getCompanyCandles(_symbol, _resolution, _from, _to){
+        const res = await this.makeExternalApiCall('/stock/candle', {
+            symbol: _symbol,
+            resolution: _resolution,
+            from: _from,
+            to: _to
+        });
+        const {c,h,l,o,s,t,v} = res;
+        return {
+            candles : {
+                closePrice: c,
+                highPrice: h,
+                lowPrice: l,
+                openPrice: o,
+                responseStatus: s,
+                timestamp: t,
+                volume: v 
+            }
+        }
+    }
 }
 
 module.exports = new FinnHubClient({
