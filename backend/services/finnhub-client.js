@@ -155,11 +155,19 @@ class FinnHubClient {
                 }, 
                 fiftyTwoWeekLowHighDates : {
                     description: '52 low-high dates',
-                    value: `${metrics['52WeekLowDate']} - ${metrics['52WeekHighDate']}`
+                    value: `${metrics['52WeekLowDate']} | ${metrics['52WeekHighDate']}`
                 }, 
                 currentDividendYield: {
                     description: 'Dividend % yield',
                     value: `${metrics.currentDividendYieldTTM}`
+                },
+                tenDayAverageTradingVolume: {
+                    description: '10 day avg volume',
+                    value: `${metrics['10DayAverageTradingVolume']}`
+                },
+                threeMonthAverageTradingVolume: {
+                    description: '12 week avg volume',
+                    value: `${metrics['3MonthAverageTradingVolume']}`
                 }
             }
         }

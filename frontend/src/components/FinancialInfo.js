@@ -38,7 +38,9 @@ const FinancialInfo = (props) => {
             'fiftyTwoWeekRange',
             'fiftyTwoWeekLowHighDates',
             'currentDividendYield',
-            'beta'
+            'beta',
+            'tenDayAverageTradingVolume',
+            'threeMonthAverageTradingVolume'
         ]
         const metrics = props.financials.data.basicCompanyFinancials;
         const res = financialOrder.map(figure =>
