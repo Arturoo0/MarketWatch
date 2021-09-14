@@ -52,7 +52,6 @@ authRouter.post(
                     userMessage: 'There is no account registered with this email.'
                 });
             }
-            console.log(user);
             const usernamesMatch = username === user.username;
             const passwordsMatch = await bcrypt.compare(password, user.password);
             if (!usernamesMatch || !passwordsMatch) {
