@@ -6,10 +6,13 @@ function checkAuthentication() {
     return asyncMiddlewareWrapper(
         async (req, res, next) => {
             const query = { sessionID: req.cookies['session-id'] };
-            const sessionExists = await Session.exists(query);
-            if (!sessionExists) {
-                throw new UnauthorizedError();
+            const session = await Session.findOne(query);
+            if (!session) {
+                throw new UnauthorizedError({
+                    message: 'Unknown session ID.'
+                });
             }
+            req.context.user.id = session.userId;
             next();
         }
     )

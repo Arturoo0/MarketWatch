@@ -1,6 +1,6 @@
 import Authentication from './pages/Authentication';
 import Dashboard from './pages/Dashboard'; 
-import Add from './pages/Add';
+import Securities from './pages/Securities';
 import SignedOut from './pages/SignedOut';
 import CompanyView from './pages/CompanyView';
 import { useEffect } from 'react';
@@ -43,8 +43,8 @@ function App(props) {
       <div>
         <Dashboard />
         <div style={mainContent}>
-          <Route path="/dashboard/add">
-            <Add />
+          <Route path="/dashboard/securities">
+            <Securities />
           </Route>
           <Route path="/dashboard/company">
             <CompanyView /> 

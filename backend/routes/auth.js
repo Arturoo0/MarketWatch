@@ -18,9 +18,9 @@ const hash = async (cred) => {
     return await bcrypt.hash(cred, saltRounds);
 }
 
-const addSessionCookie = async (email, res) => {
+const addSessionCookie = async (userId, res) => {
     const sessionID = crypto.randomBytes(16).toString('base64');
-    const session = new Session({ email, sessionID });
+    const session = new Session({ userId, sessionID });
     await session.save();
     res.header('Access-Control-Allow-Credentials', true);
     res.cookie('session-id', sessionID);
@@ -59,7 +59,7 @@ authRouter.post(
                     userMessage: 'Invalid credentials.'
                 });
             }
-            await addSessionCookie(email, res);
+            await addSessionCookie(user._id, res);
             return {
                 message: 'Successfully logged in.'
             };
@@ -106,7 +106,7 @@ authRouter.post(
                 portfolios: [defaultPortfolio._id],
             });
             await user.save();
-            await addSessionCookie(email, res);
+            await addSessionCookie(user._id, res);
             res.status(201);
             return {
                 message: 'Successfully created account.'
@@ -125,4 +125,4 @@ authRouter.get('/is-valid-session', async (req, res) => {
 
 module.exports = {
     authRouter
-}
+};

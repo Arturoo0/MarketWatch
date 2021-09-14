@@ -16,19 +16,21 @@ const getStatusColor = (status) => {
     return colors.GREEN;
 }
 
-const loggingMiddleware = (req, res, next) => {
-    const startTime = process.hrtime.bigint();
-    const logRequest = () => {
-        const { statusCode } = res;
-        const endTime = process.hrtime.bigint();
-        const elapsedTime = Number(endTime - startTime);
-        const milliseconds = (elapsedTime * 1e-6).toFixed(2);
-        MetricsService.recordLatency(milliseconds);
-        const color = getStatusColor(statusCode);
-        logger.info(`${color}${req.method}${reset} ${req.originalUrl} ${color}${statusCode}${reset} - ${milliseconds} ms`);    
+const loggingMiddleware = () => {
+    return (req, res, next) => {
+        const startTime = process.hrtime.bigint();
+        const logRequest = () => {
+            const { statusCode } = res;
+            const endTime = process.hrtime.bigint();
+            const elapsedTime = Number(endTime - startTime);
+            const milliseconds = (elapsedTime * 1e-6).toFixed(2);
+            MetricsService.recordLatency(milliseconds);
+            const color = getStatusColor(statusCode);
+            logger.info(`${color}${req.method}${reset} ${req.originalUrl} ${color}${statusCode}${reset} - ${milliseconds} ms`);    
+        }
+        res.on('finish', logRequest);
+        next();
     }
-    res.on('finish', logRequest);
-    next();
 }
 
 module.exports = loggingMiddleware;
