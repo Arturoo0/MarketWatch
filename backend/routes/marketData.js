@@ -5,7 +5,7 @@ const { asyncHandlerWrapper } = require('../utils/apiUtils');
 
 const marketDataRouter = express.Router();
 
-marketDataRouter.use(checkAuthentication());
+// marketDataRouter.use(checkAuthentication());
 
 marketDataRouter.get(
     '/us-ex-symbols',
@@ -59,6 +59,17 @@ marketDataRouter.get(
             to
         );
         return candles;
+    })
+);
+
+marketDataRouter.get(
+    '/company-basic-financials/:symbol',
+    asyncHandlerWrapper(async (req) => {
+        const { symbol } = req.params;
+        const financials = await FinnhubClient.getBasicCompanyFinancials(
+            symbol
+        );
+        return financials;
     })
 );
 

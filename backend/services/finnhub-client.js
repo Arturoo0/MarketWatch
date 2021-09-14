@@ -132,6 +132,17 @@ class FinnHubClient {
             }
         }
     }
+
+    async getBasicCompanyFinancials(_symbol){
+        const res = await this.makeExternalApiCall('/stock/metric', {
+            symbol: _symbol
+        }); 
+        return {
+            basicCompanyFinancials : {
+                res
+            }
+        }
+    };
 }
 
 module.exports = new FinnHubClient({
