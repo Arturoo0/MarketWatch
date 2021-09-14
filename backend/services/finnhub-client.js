@@ -138,7 +138,6 @@ class FinnHubClient {
             symbol: _symbol
         }); 
         const metrics = res.metric;
-        console.log(res);
         return {
             basicCompanyFinancials: {
                 beta: {
