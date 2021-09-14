@@ -108,14 +108,16 @@ class FinnHubClient {
         return {
             companyNews : {
                 res
-            };
+            }
         }
     }
 
-    async getCompanyCandles(symbol){
-        const _symbol = symbol;
+    async getCompanyCandles(_symbol, _resolution, _from, _to){
         const res = await this.makeExternalApiCall('/stock/candle', {
-            symbol: _symbol
+            symbol: _symbol,
+            resolution: _resolution,
+            from: _from,
+            to: _to
         });
         return {
             candles : {
