@@ -1,6 +1,6 @@
 
 import { get } from '../utils/baseRequest';
-import { QuoteInfo, RelatedNews, CandlestickCompanyView } from '../components';
+import { QuoteInfo, RelatedNews, CandlestickCompanyView, financialInfo, FinancialInfo } from '../components';
 import React, { useEffect, useState } from 'react'; 
 import { 
     Spinner
@@ -41,6 +41,7 @@ const CompanyView = (props) => {
     const [quoteData, setQuoteData] = useState(null);
     const [companyNews, setCompanyNews] = useState(null);
     const [candleData, setCandleData] = useState(null);
+    const [financialData, setFinancialData] = useState(null);
     useEffect(async () => {
         const pullTickerFromURL = () => {
             const windowUrl = window.location.search;
@@ -60,9 +61,10 @@ const CompanyView = (props) => {
                 `/market-data/company-profile-2/${symbol}`,
                 `/market-data/company-quote/${symbol}`,
                 `/market-data/company-news/${symbol}`,
-                `/market-data/company-candles/${symbol}/${'D'}/${oneYearBack}/${currentUnixTime}`, 
+                `/market-data/company-candles/${symbol}/${'D'}/${oneYearBack}/${currentUnixTime}`,
+                `/market-data/company-basic-financials/${symbol}` 
             ];
-            const [profile, quote, news, candles] = await Promise.all(
+            const [profile, quote, news, candles, financials] = await Promise.all(
                 endpoints.map((endpoint) => {
                     return get(endpoint, {});
                 })
@@ -71,6 +73,7 @@ const CompanyView = (props) => {
             setQuoteData(quote);
             setCompanyNews(news);
             setCandleData(candles);
+            setFinancialData(financialData);
         }
     }, []);
 
@@ -127,6 +130,7 @@ const CompanyView = (props) => {
                         <hr/>
                         <RelatedNews news={companyNews}/>
                     </div>
+                    <FinancialInfo />
                 </div>
             }
         </div>

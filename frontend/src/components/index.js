@@ -6,6 +6,7 @@ import SymbolLookupCard from "./SymbolLookupCard";
 import QuoteInfo from "./QuoteInfo";
 import RelatedNews from "./RelatedNews";
 import CandlestickCompanyView from "./CandlestickCompanyView";
+import FinancialInfo from "./FinancialInfo";
 
 export {
     LoginForm,
@@ -14,5 +15,6 @@ export {
     SymbolLookupCard,
     QuoteInfo,
     RelatedNews,
-    CandlestickCompanyView
+    CandlestickCompanyView,
+    FinancialInfo
 }
