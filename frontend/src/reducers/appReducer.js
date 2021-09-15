@@ -13,7 +13,7 @@ function appReducer(state = appDefaultState, action) {
             checkingAuthentication: false,
           };
         default:
-          return { ...state, isAuthenticated: false };
+          return state
     }
 }
 

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { BsArrowRight, BsFillPersonFill, BsArrowBarRight } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
 import { post } from '../utils/baseRequest';
@@ -54,7 +54,7 @@ const generateSidePanelSelectors = (selectors) => {
 };
 
 const Dashboard = (props) => {
-    const { dispatch } = props;
+    const dispatch = useDispatch();
 
     const logoutOnClick = async () => {
         await post('/auth/logout');
@@ -82,4 +82,4 @@ const Dashboard = (props) => {
     );
 };
 
-export default connect()(Dashboard);
+export default Dashboard;

@@ -6,8 +6,8 @@ import { useDebounce } from '../utils/utils';
 import { Row, Col } from 'react-bootstrap';
 
 const securitiesContainerStyle = {
-    padding: '10px 10px',
-    height: '100vh',
+    margin: '1rem',
+    padding: '1rem',
 };
 
 const symbolContainerStyle = {
@@ -17,11 +17,6 @@ const symbolContainerStyle = {
 const noMatchesTextStyle = {
     margin: '1rem',
     textAlign: 'center',
-}
-
-const titleStyle = {
-    marginTop: '2rem',
-    marginBottom: '2rem',
 }
 
 const Securities = () => {
@@ -59,7 +54,7 @@ const Securities = () => {
 
     return (
         <div style={securitiesContainerStyle}>
-            <h2 style={titleStyle}>Securities</h2>
+            <h2>Securities</h2>
             <Search onChangeHandle={(text) => {setSearchTerm(text)}}/>
             <Row style={symbolContainerStyle}>
                 {renderMatchedSymbols()}
