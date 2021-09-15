@@ -31,15 +31,6 @@ const QuoteInfo = (props) => {
     const generateQuoteBlock = () => {
         const quoteRef = props.quote.data.companyQuote;
         if (quoteRef === null || quoteRef === undefined) return null;
-        const {
-            currentPrice,
-            change,
-            percentChange,
-            highPriceOfTheDay,
-            lowPriceOfTheDay,
-            openPriceOfTheDay,
-            previousClosingPriceOfTheDay
-        } = props;
         const quoteOrder = [
             'currentPrice',
             'change',
