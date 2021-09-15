@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
 import { Form, Button, Card } from 'react-bootstrap';
-import { useHistory } from 'react-router';
 import { post } from '../utils/baseRequest.js'
 import { useDispatch } from 'react-redux';
-import { setAuthenticatedAction } from '../actions/authenticationActions.js';
+import { refreshAuthentication } from '../actions/authenticationActions.js';
 
 const cardStyle = {
     padding: '10px 25px'
@@ -22,9 +21,9 @@ const attemptLogIn = async (credObj, successCallback) => {
     const res = await post('/auth/login', credObj);
     switch (res.status) {
         case 200:
-            alert(res.data.message);
             successCallback();
             break;
+        case 400:
         case 401:
             alert(res.errRes.message);
             break;
@@ -33,16 +32,14 @@ const attemptLogIn = async (credObj, successCallback) => {
     }
 }
 
-const LoginForm = (props) => {
-    const history = useHistory();
+const LoginForm = () => {
     const dispatch = useDispatch();
     const [enteredEmail, updateEnteredEmail] = useState();
     const [enteredUsername, updateEnteredUsername] = useState();
     const [enteredPassword, updateEnteredPassword] = useState();
 
     const logInSuccessCallback = () => {
-        dispatch(setAuthenticatedAction(true));
-        history.push('/dashboard');
+        dispatch(refreshAuthentication());
     }
 
     return (

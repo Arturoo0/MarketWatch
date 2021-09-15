@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Form, Button, Card } from 'react-bootstrap';
 import { post } from '../utils/baseRequest.js'
 import { useDispatch } from 'react-redux';
-import { setAuthenticatedAction } from '../actions/authenticationActions.js';
-
+import { refreshAuthentication } from '../actions/authenticationActions.js';
 
 const cardStyle = {
     padding: '10px 25px'
@@ -21,30 +19,25 @@ const attemptSignUp = async (credObj, successCallback) => {
     const res = await post('/auth/sign-up', credObj);
     switch (res.status) {
         case 201:
-            alert(res.data.message);
             successCallback();
             break;
+        case 400:
         case 409:
             alert(res.errRes.message);
-            break;
-        case 400:
-            alert(res.errRes.message)
             break;
         default:
             break;
     }
 }
 
-const SignupForm = (props) => {
-    const history = useHistory();
+const SignupForm = () => {
     const dispatch = useDispatch();
     const [enteredEmail, updateEnteredEmail] = useState();
     const [enteredUsername, updateEnteredUsername] = useState();
     const [enteredPassword, updateEnteredPassword] = useState();
 
     const signUpSuccessCallback = () => {
-        dispatch(setAuthenticatedAction(true));
-        history.push('/dashboard');
+        dispatch(refreshAuthentication());
     }
 
     return (
@@ -77,15 +70,11 @@ const SignupForm = (props) => {
                 <Button
                     variant="primary"
                     type="button"
-                    onClick={
-                        () => attemptSignUp({
-                            email: enteredEmail,
-                            username: enteredUsername,
-                            password: enteredPassword
-                        },
-                        signUpSuccessCallback
-                        )
-                    }
+                    onClick={() => attemptSignUp({
+                        email: enteredEmail,
+                        username: enteredUsername,
+                        password: enteredPassword
+                    }, signUpSuccessCallback)}
                 >
                     Submit
                 </Button>

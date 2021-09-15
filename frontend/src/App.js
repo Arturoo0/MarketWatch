@@ -2,10 +2,9 @@ import Authentication from './pages/Authentication';
 import Dashboard from './pages/Dashboard'; 
 import SignedOut from './pages/SignedOut';
 import { useEffect } from 'react';
-import { get } from './utils/baseRequest.js';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuthenticatedAction } from './actions/authenticationActions.js';
+import { refreshAuthentication } from './actions/authenticationActions';
 
 function App() {
   const dispatch = useDispatch();
@@ -14,11 +13,7 @@ function App() {
   const checkingAuthentication = useSelector(state => state.app.checkingAuthentication);
 
   useEffect(() => {
-    async function authenticateUser() {
-      const { data } = await get('/auth/is-valid-session', {});
-      dispatch(setAuthenticatedAction(data.isAuthenticated));
-    }
-    authenticateUser();
+    dispatch(refreshAuthentication());
   }, [dispatch]);
 
   if (checkingAuthentication) {

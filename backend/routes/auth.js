@@ -134,9 +134,10 @@ authRouter.get('/is-valid-session',
     asyncHandlerWrapper(
         async (req) => {
             const query = { sessionId: req.cookies['session-id'] };
-            const sessionExists = await Session.exists(query);
+            const session = await Session.findOne(query);
             return {
-                isAuthenticated: sessionExists,
+                isAuthenticated: !!session,
+                userId: session?.userId,
             };
         }
     )

@@ -2,18 +2,20 @@
 const appDefaultState = {
     checkingAuthentication: true,
     isAuthenticated: false,
+    userId: null,
 };
 
 function appReducer(state = appDefaultState, action) {
     switch (action.type) {
-        case 'SET_AUTHENTICATED':
-          return {
-            ...state,
-            isAuthenticated: action.data.isAuthenticated,
-            checkingAuthentication: false,
-          };
+        case 'AUTHENTICATION_REFRESH':
+            const { isAuthenticated, userId } = action.data;
+            return {
+                isAuthenticated,
+                userId,
+                checkingAuthentication: false,
+            };
         default:
-          return state
+            return state
     }
 }
 
