@@ -13,7 +13,7 @@ function checkAuthentication() {
                 });
             }
             if (Date.now() >= session.expiresAt) {
-                await Session.deleteOne({ sessionId });
+                await Session.deleteOne({ sessionId: session.sessionId });
                 throw new UnauthorizedError({
                     message: 'Expired session',
                     userMessage: 'Please login.',

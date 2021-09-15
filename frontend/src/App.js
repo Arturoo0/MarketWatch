@@ -6,7 +6,7 @@ import CompanyView from './pages/CompanyView';
 import { useEffect } from 'react';
 import { get } from './utils/baseRequest.js';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAuthenticatedAction } from './actions/authenticationActions.js';
 import Portfolios from './pages/Portfolios';
 
@@ -17,7 +17,9 @@ const mainContent = {
 }
 
 function App(props) {
-  const { dispatch, checkingAuthentication, isAuthenticated } = props;
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(state => state.app.isAuthenticated);
+  const checkingAuthentication = useSelector(state => state.app.checkingAuthentication);
 
   useEffect(() => {
     async function authenticateUser() {
@@ -71,9 +73,4 @@ function App(props) {
   );
 }
 
-function appMapStateToProps(state) {
-  const { isAuthenticated, checkingAuthentication } = state.app;
-  return { checkingAuthentication, isAuthenticated };
-}
-
-export default connect(appMapStateToProps)(App);
+export default App;

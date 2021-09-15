@@ -18,6 +18,11 @@ const PortfolioSchema = mongoose.Schema({
             }).dashed;
         },
     },
+    description: {
+        type: String,
+        required: false,
+        default: 'A portfolio.',
+    },
     public: {
         type: Boolean,
         required: false,

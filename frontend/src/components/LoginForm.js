@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { post } from '../utils/baseRequest.js'
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setAuthenticatedAction } from '../actions/authenticationActions.js';
 
 const cardStyle = {
@@ -33,8 +33,9 @@ const attemptLogIn = async (credObj, successCallback) => {
     }
 }
 
-const LoginForm = ({ dispatch }) => {
+const LoginForm = (props) => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const [enteredEmail, updateEnteredEmail] = useState();
     const [enteredUsername, updateEnteredUsername] = useState();
     const [enteredPassword, updateEnteredPassword] = useState();
@@ -87,4 +88,4 @@ const LoginForm = ({ dispatch }) => {
     );
 };
 
-export default connect()(LoginForm);
+export default LoginForm;

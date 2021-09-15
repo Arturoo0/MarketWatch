@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Button, Card } from 'react-bootstrap';
 import { post } from '../utils/baseRequest.js'
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setAuthenticatedAction } from '../actions/authenticationActions.js';
 
 
@@ -35,8 +35,9 @@ const attemptSignUp = async (credObj, successCallback) => {
     }
 }
 
-const SignupForm = ({ dispatch }) => {
+const SignupForm = (props) => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const [enteredEmail, updateEnteredEmail] = useState();
     const [enteredUsername, updateEnteredUsername] = useState();
     const [enteredPassword, updateEnteredPassword] = useState();
@@ -93,4 +94,4 @@ const SignupForm = ({ dispatch }) => {
     );
 };
 
-export default connect()(SignupForm);
+export default SignupForm;

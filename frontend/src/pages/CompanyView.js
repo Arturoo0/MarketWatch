@@ -1,10 +1,7 @@
 
 import { get } from '../utils/baseRequest';
-import { QuoteInfo, RelatedNews, CandlestickCompanyView, financialInfo, FinancialInfo } from '../components';
-import React, { useEffect, useState } from 'react'; 
-import { 
-    Spinner
-} from 'react-bootstrap'
+import { QuoteInfo, RelatedNews, CandlestickCompanyView, financialInfo, FinancialInfo, PageSpinner } from '../components';
+import React, { useEffect, useState } from 'react';
 
 const companyViewContainerStyle = {
     padding: '4% 4%'
@@ -104,14 +101,9 @@ const CompanyView = (props) => {
     return (   
         <div>
             {
-                companyData === null ?
-                <div style={loadingContainerStyle}>
-                    <Spinner style={loaderStyle} animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                </div>
-                :
-                <div style={companyViewContainerStyle}>
+                companyData === null
+                ? <PageSpinner />
+                : <div style={companyViewContainerStyle}>
                     <div style={headerContainerStyle}>
                         <div>
                             <h3>
