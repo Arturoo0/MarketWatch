@@ -53,12 +53,12 @@ class FinnHubClient {
         };
     }
 
-    async getCompanyProfile2(companySymbol) {
+    async getCompanyProfile(companySymbol) {
         const res = await this.makeExternalApiCall('/stock/profile2', {
             symbol: companySymbol
         });
         return {
-            companyProfile2: res
+            companyProfile: res
         };
     }
     
@@ -66,7 +66,7 @@ class FinnHubClient {
         const res = await this.makeExternalApiCall('/quote', {
             symbol: companySymbol
         });
-        const {c,d,dp,h,l,o,pc} = res;
+        const { c, d, dp, h, l, o, pc } = res;
         return {
             companyQuote: {
                 currentPrice: {
@@ -119,7 +119,7 @@ class FinnHubClient {
             from: _from,
             to: _to
         });
-        const {c,h,l,o,s,t,v} = res;
+        const { c, h, l, o, s, t, v } = res;
         return {
             candles : {
                 closePrice: c,

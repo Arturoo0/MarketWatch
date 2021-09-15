@@ -33,13 +33,8 @@ function asyncMiddlewareWrapper(middleware) {
 }
 
 function requestValidation(validationOptions) {
-    const baseValidationOptions = {
-        params: validationOptions.params || {},
-        body: validationOptions.body || {},
-        query: validationOptions.query || {},
-    };
     return (req, res, next) => {
-        _.each(baseValidationOptions, (schema, key) => {
+        _.each(validationOptions, (schema, key) => {
             const validationSchema = joi.object().keys(schema);
             const { error } = validationSchema.validate(_.get(req, key, {}));
             if (error) {

@@ -72,13 +72,12 @@ authRouter.post(
 
 authRouter.post(
     '/logout',
-    checkAuthentication(),
     asyncHandlerWrapper(
         async (req, res) => {
-            const sessionId = req.context.user.sessionId;
+            const sessionId = req.cookies[SESSION_ID_COOKIE_NAME];
             await Session.deleteOne({ sessionId });
             res.clearCookie(SESSION_ID_COOKIE_NAME);
-            res.sendStatus(200);
+            return res.sendStatus(200);
         }
     ),
 );
@@ -131,13 +130,17 @@ authRouter.post(
     )
 );
 
-authRouter.get('/is-valid-session', async (req, res) => {
-    const query = { sessionId: req.cookies['session-id'] };
-    const sessionExists = await Session.exists(query);
-    return res.send({
-        isAuthenticated: sessionExists 
-    });
-});
+authRouter.get('/is-valid-session',
+    asyncHandlerWrapper(
+        async (req) => {
+            const query = { sessionId: req.cookies['session-id'] };
+            const sessionExists = await Session.exists(query);
+            return {
+                isAuthenticated: sessionExists,
+            };
+        }
+    )
+);
 
 module.exports = {
     authRouter
