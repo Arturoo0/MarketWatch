@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BsArrowRight, BsFillPersonFill, BsArrowBarRight } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
 import { post } from '../utils/baseRequest';
-import { setAuthenticatedAction } from '../actions/authenticationActions.js'
+import { refreshAuthentication } from '../actions/authenticationActions.js'
 import Portfolios from './Portfolios';
 import Securities from './Securities';
 import CompanyView from './CompanyView';
@@ -66,13 +66,14 @@ const generateSidePanelSelectors = (selectors) => {
 const Dashboard = () => {
     const dispatch = useDispatch();
     const isAuthenticated = useSelector(state => state.app.isAuthenticated);
+    const checkingAuthentication = useSelector(state => state.app.checkingAuthentication);
 
     const logoutOnClick = async () => {
         await post('/auth/logout');
-        dispatch(setAuthenticatedAction(false));
+        dispatch(refreshAuthentication());
     }
 
-    if (!isAuthenticated) {
+    if (!checkingAuthentication && !isAuthenticated) {
         return <Redirect to='/signed-out' />;
     }
 

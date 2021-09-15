@@ -7,7 +7,7 @@ export function getPortfolios() {
             type: 'REFRESH_PORTFOLIOS',
             data: {
                 portfolios: data.portfolios,
-            }
+            },
         });    
     }
 }
