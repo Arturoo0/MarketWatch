@@ -13,7 +13,7 @@ const Portfolios = () => {
     const portfolios = useSelector(state => state.portfolios);
 
     useEffect(() => {
-        getPortfolios(dispatch);
+        dispatch(getPortfolios());
     }, [dispatch]);
 
     function renderPortfolios() {
