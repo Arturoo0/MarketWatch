@@ -6,7 +6,7 @@ export default function configureStore() {
     const enhancers = [
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
         applyMiddleware(thunkMiddleware),
-    ];
+    ].filter((enhancer) => !!enhancer);
     const store = createStore(
         rootReducer,
         compose(...enhancers),
