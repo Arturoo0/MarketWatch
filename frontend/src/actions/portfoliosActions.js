@@ -1,12 +1,13 @@
 import { get } from '../utils/baseRequest.js';
 
-export function getPortfolios() {
+export function getPortfolios(userId) {
     return async (dispatch) => {
-        const { data } = await get('/users/me/portfolios');
+        const response = await get(`/users/${userId}/portfolios`);
+        const { portfolios } = response.data;
         dispatch({
             type: 'REFRESH_PORTFOLIOS',
             data: {
-                portfolios: data.portfolios,
+                portfolios,
             },
         });    
     }

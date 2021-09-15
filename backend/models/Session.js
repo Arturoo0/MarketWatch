@@ -1,11 +1,14 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 
 const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
 
 const SessionSchema = mongoose.Schema({
-    sessionId: {
+    _id: {
         type: String,
-        required: true,
+        default: () => {
+            return crypto.randomBytes(16).toString('base64');
+        }
     },
     userId: {
         type: String,
@@ -13,7 +16,7 @@ const SessionSchema = mongoose.Schema({
     },
     expiresAt: {
         type: Number,
-        required: false,
+        required: true,
         default: () => {
             return Date.now() + THIRTY_DAYS;
         },
