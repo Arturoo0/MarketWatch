@@ -4,14 +4,15 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
-const auth = require('./routes/auth.js');
 const logger = require('./utils/logger');
 const config = require('./config');
-const marketData = require('./routes/marketData.js');
 const middleware = require('./middleware');
 const FinnHubClient = require('./services/finnhub-client');
 const MetricsService = require('./services/metrics-service.js');
+const authRouter = require('./routes/auth.js');
+const testRouter = require('./routes/test.js');
 const usersRouter = require('./routes/users.js');
+const marketDataRouter = require('./routes/marketData.js');
 
 const APP_START_TIME = Date.now();
 
@@ -54,9 +55,10 @@ async function initApp() {
     app.use(middleware.contextMiddleware());
     app.use(middleware.loggingMiddleware());
     
-    app.use('/auth', auth.authRouter);
-    app.use('/market-data', marketData.marketDataRouter);
-    app.use('/users', usersRouter.usersRouter);
+    app.use('/auth', authRouter);
+    app.use('/market-data', marketDataRouter);
+    app.use('/users', usersRouter);
+    app.use('/test', testRouter);
 
     app.get('/status', (req, res) => {
         const statusData = {

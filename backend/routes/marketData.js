@@ -77,6 +77,4 @@ marketDataRouter.get(
     })
 );
 
-module.exports = {
-    marketDataRouter
-};
+module.exports = marketDataRouter;

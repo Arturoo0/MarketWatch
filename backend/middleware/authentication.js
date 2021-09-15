@@ -5,7 +5,7 @@ const { UnauthorizedError } = require('../utils/errors.js');
 function checkAuthentication() {
     return asyncMiddlewareWrapper(
         async (req, res, next) => {
-            const query = { sessionId: req.cookies['session-id'] };
+            const query = { _id: req.cookies['session-id'] };
             const session = await Session.findOne(query);
             if (!session) {
                 throw new UnauthorizedError({
@@ -13,14 +13,14 @@ function checkAuthentication() {
                 });
             }
             if (Date.now() >= session.expiresAt) {
-                await Session.deleteOne({ sessionId: session.sessionId });
+                await Session.deleteOne({ _id: session._id });
                 throw new UnauthorizedError({
                     message: 'Expired session',
                     userMessage: 'Please login.',
                 });
             }
             req.context.user.id = session.userId;
-            req.context.user.sessionId = session.sessionId;
+            req.context.user.sessionId = session._id;
             next();
         }
     )

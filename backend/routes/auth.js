@@ -1,7 +1,6 @@
 const joi = require('joi');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const zxcvbn = require('zxcvbn');
 const express = require('express');
 
@@ -10,7 +9,6 @@ const { Session } = require('../models/Session.js');
 const { Portfolio } = require('../models/Portfolio.js');
 const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils.js');
 const { UnauthorizedError, ConflictError, InvalidRequestError } = require('../utils/errors.js');
-const checkAuthentication = require('../middleware/authentication.js');
 
 const authRouter = express.Router();
 
@@ -22,11 +20,10 @@ const hash = async (cred) => {
 const SESSION_ID_COOKIE_NAME = 'session-id';
 
 const addSessionCookie = async (userId, res) => {
-    const sessionId = crypto.randomBytes(16).toString('base64');
-    const session = new Session({ userId, sessionId });
+    const session = new Session({ userId });
     await session.save();
     res.header('Access-Control-Allow-Credentials', true);
-    res.cookie(SESSION_ID_COOKIE_NAME, sessionId);
+    res.cookie(SESSION_ID_COOKIE_NAME, session._id);
 }
 
 const credentialsValidationHandler = requestValidation({
@@ -75,7 +72,7 @@ authRouter.post(
     asyncHandlerWrapper(
         async (req, res) => {
             const sessionId = req.cookies[SESSION_ID_COOKIE_NAME];
-            await Session.deleteOne({ sessionId });
+            await Session.deleteOneBy({ _id: sessionId });
             res.clearCookie(SESSION_ID_COOKIE_NAME);
             return res.sendStatus(200);
         }
@@ -130,10 +127,11 @@ authRouter.post(
     )
 );
 
-authRouter.get('/is-valid-session',
+authRouter.get(
+    '/is-valid-session',
     asyncHandlerWrapper(
         async (req) => {
-            const query = { sessionId: req.cookies['session-id'] };
+            const query = { _id: req.cookies['session-id'] };
             const session = await Session.findOne(query);
             return {
                 isAuthenticated: !!session,
@@ -143,6 +141,4 @@ authRouter.get('/is-valid-session',
     )
 );
 
-module.exports = {
-    authRouter
-};
+module.exports = authRouter;

@@ -11,9 +11,10 @@ const timeAgo = new TimeAgo('en-US');
 const Portfolios = () => {
     const dispatch = useDispatch();
     const portfolios = useSelector(state => state.portfolios);
+    const userId = useSelector(state => state.app.userId);
 
     useEffect(() => {
-        dispatch(getPortfolios());
+        dispatch(getPortfolios(userId));
     }, [dispatch]);
 
     function renderPortfolios() {
