@@ -72,7 +72,7 @@ authRouter.post(
     asyncHandlerWrapper(
         async (req, res) => {
             const sessionId = req.cookies[SESSION_ID_COOKIE_NAME];
-            await Session.deleteOneBy({ _id: sessionId });
+            await Session.deleteOne({ _id: sessionId });
             res.clearCookie(SESSION_ID_COOKIE_NAME);
             return res.sendStatus(200);
         }
