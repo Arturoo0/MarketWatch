@@ -1,7 +1,8 @@
 const express = require('express');
 const FinnhubClient = require('../services/finnhub-client');
 const checkAuthentication = require('../middleware/authentication');
-const { asyncHandlerWrapper } = require('../utils/apiUtils');
+const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils');
+const joi = require('joi');
 
 const marketDataRouter = express.Router();
 
@@ -17,16 +18,16 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company-profile-2/:symbol',
+    '/company/:symbol/profile',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
-        const companyProfile2 = await FinnhubClient.getCompanyProfile2(symbol);
-        return companyProfile2;
+        const companyProfile = await FinnhubClient.getCompanyProfile(symbol);
+        return companyProfile;
     }),
 );
 
 marketDataRouter.get(
-    '/company-quote/:symbol',
+    '/company/:symbol/quote',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
         const companyQuote = await FinnhubClient.getCompanyQuote(symbol);
@@ -35,7 +36,7 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company-news/:symbol',
+    '/company/:symbol/news',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
         const companyNews = await FinnhubClient.getCompanyNews(symbol);
@@ -44,14 +45,17 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company-candles/:symbol/:resolution/:from/:to',
+    '/company/:symbol/candles',
+    requestValidation({
+        query: {
+            resolution: joi.string().required(),
+            from: joi.number().required(),
+            to: joi.number().required(),
+        }
+    }),
     asyncHandlerWrapper(async (req) => {
-        const { 
-            symbol,
-            resolution,
-            from,
-            to
-        } = req.params;
+        const { symbol } = req.params;
+        const { resolution, from, to } = req.query;
         const candles = await FinnhubClient.getCompanyCandles(
             symbol,
             resolution,
@@ -63,7 +67,7 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company-basic-financials/:symbol',
+    '/company/:symbol/basic-financials',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
         const financials = await FinnhubClient.getBasicCompanyFinancials(
@@ -75,4 +79,4 @@ marketDataRouter.get(
 
 module.exports = {
     marketDataRouter
-}
+};
