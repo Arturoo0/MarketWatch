@@ -1,10 +1,14 @@
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BsArrowRight, BsFillPersonFill, BsArrowBarRight } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
 import { post } from '../utils/baseRequest';
-import { setAuthenticatedAction } from '../actions/authenticationActions.js';
+import { setAuthenticatedAction } from '../actions/authenticationActions.js'
+import Portfolios from './Portfolios';
+import Securities from './Securities';
+import CompanyView from './CompanyView';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 const sidenavStyle = {
     height: '100%',
@@ -39,6 +43,12 @@ const logoutButtonStyle = {
     transform: 'translateX(-50%)',
 }
 
+const mainContent = {
+    marginLeft: '200px',
+    fontSize: '20px',
+    padding: '0px 10px'
+}  
+
 const handleLinkClick = (selector) => {
     window.location.pathname = `/dashboard/${selector.toLowerCase()}`;
 }
@@ -53,12 +63,17 @@ const generateSidePanelSelectors = (selectors) => {
     return res;
 };
 
-const Dashboard = (props) => {
+const Dashboard = () => {
     const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => state.app.isAuthenticated);
 
     const logoutOnClick = async () => {
         await post('/auth/logout');
         dispatch(setAuthenticatedAction(false));
+    }
+
+    if (!isAuthenticated) {
+        return <Redirect to='/signed-out' />;
     }
 
     return (
@@ -78,6 +93,19 @@ const Dashboard = (props) => {
                     <BsArrowBarRight style={{ marginLeft: '5px' }} />
                 </Button>
             </div>
+            <Router>
+                <div style={mainContent}>
+                    <Route path='/dashboard/securities'>
+                        <Securities />
+                    </Route>
+                    <Route path='/dashboard/company'>
+                        <CompanyView /> 
+                    </Route>
+                    <Route path='/dashboard/portfolios'>
+                        <Portfolios /> 
+                    </Route>
+                </div>
+            </Router>
         </div>
     );
 };
