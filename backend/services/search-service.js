@@ -44,7 +44,7 @@ class SearchService {
 
     config = {
         nGramN: 2,
-        editDistanceRatioThreshold: 0.25,
+        editDistanceRatioThreshold: 0.35,
         returnReference: false,
         getBlob: (document) => document,
     }

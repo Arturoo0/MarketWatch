@@ -6,7 +6,7 @@ class FinnHubClient {
     constructor(config) {
         this.baseRoute = 'https://finnhub.io/api/v1';
         this.hasFetchedSymbols = false;
-        this.symbols = {};
+        this.symbols = [];
         this.config = config;
         this.symbolSearchService = new SearchService({
             getBlob: (document) => {
@@ -49,7 +49,7 @@ class FinnHubClient {
             ? this.symbolSearchService.search(searchQuery)
             : this.symbols;
         return {
-            US_EX_SYMBOLS: potentialMatches.slice(0, 50),
+            US_EX_SYMBOLS: potentialMatches,
         };
     }
 
