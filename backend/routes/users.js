@@ -94,11 +94,21 @@ usersRouter.post(
 usersRouter.post(
     '/:userId/portfolios/create',
     requestValidation({
-        baseUserRequestValidationSchema
+        ...baseUserRequestValidationSchema,
+        body: {
+            units: joi.string()
+                .allow('')
+                .optional(),
+            price: joi.string()
+                .allow('')
+                .optional(),
+            selectedPortfolio: joi.string()
+                .allow('')
+                .optional(),
+        },
     }),
     asyncHandlerWrapper(
         async (req) => {
-            console.log(req.body);
             return {};
         }
     )

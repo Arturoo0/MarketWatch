@@ -29,11 +29,12 @@ const AddSecurityForm = (props) => {
     };
 
     const pullAddSecurityData = async () => {
-        await post(`/users/${userId}/portfolios/create`, {
+        const body = {
             units: enteredUnits,
             price: enteredPrice,
-            portfolio: selectedPortfolio 
-        });
+            selectedPortfolio: selectedPortfolio 
+        }
+        await post(`/users/${userId}/portfolios/create`, body);
     };
 
     return (
