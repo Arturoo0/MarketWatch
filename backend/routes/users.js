@@ -92,9 +92,12 @@ usersRouter.post(
 );
 
 usersRouter.post(
-    '/:userId/portfolios/securities',
+    '/:userId/portfolios/:portfolioId/securities',
     requestValidation({
-        ...baseUserRequestValidationSchema,
+        params: {
+            portfolioId: joi.string(),
+            ...baseUserRequestValidationSchema.params
+        },
         body: {
             units: joi.string()
                 .allow('')
@@ -109,6 +112,7 @@ usersRouter.post(
     }),
     asyncHandlerWrapper(
         async (req) => {
+            console.log(req.body);
             return {};
         }
     )

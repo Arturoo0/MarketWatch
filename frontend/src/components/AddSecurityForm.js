@@ -31,10 +31,9 @@ const AddSecurityForm = (props) => {
     const pullAddSecurityData = async () => {
         const body = {
             units: enteredUnits,
-            price: enteredPrice,
-            selectedPortfolio: selectedPortfolio 
+            price: enteredPrice
         }
-        await post(`/users/${userId}/portfolios/securities`, body);
+        await post(`/users/${userId}/portfolios/${selectedPortfolio}/securities`, body);
     };
 
     return (
