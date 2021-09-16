@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { PageSpinner } from '../components';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { PageSpinner, AddPortfolioForm } from '../components';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { createPortfolio, getPortfolios } from '../actions/portfoliosActions.js';
 import TimeAgo from 'javascript-time-ago';
@@ -82,29 +82,14 @@ const Portfolios = () => {
                 <Button variant='success' onClick={openCreateModal}>Create portfolio</Button>
             </div>
             {renderPortfolios()}
-            <Modal centered show={showCreateModal} onHide={closeCreateModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Portfolio Settings</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className='mb-3' controlId='formBasicEmail'>
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type='email' placeholder='Enter portfolio name' onChange={onChangePortfolioName}/>
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control type='email' placeholder='Enter portfolio description' onChange={onChangePortfolioDescription} />
-                            <Form.Label>Access</Form.Label>
-                            <Form.Select onChange={onChangePortfolioAccess}>
-                                <option value='private'>Private</option>
-                                <option value='public'>Public</option>
-                            </Form.Select>
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant='success' onClick={createPortfolioOnClick}>Create</Button>
-                </Modal.Footer>
-            </Modal>
+            <AddPortfolioForm config={{
+                'showCreateModal': showCreateModal,
+                'closeCreateModal': closeCreateModal,
+                'onChangePortfolioName': onChangePortfolioName, 
+                'onChangePortfolioDescription': onChangePortfolioDescription,
+                'onChangePortfolioAccess': onChangePortfolioAccess,
+                'createPortfolioOnClick': createPortfolioOnClick
+            }}/>
         </div>
     );
 }
