@@ -9,11 +9,10 @@ import en from 'javascript-time-ago/locale/en';
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo('en-US');
 
-
 const controlContainerStyle = {
     display: 'flex',
     justifyContent: 'flex-end',
-    margin: '1rem',
+    margin: '1rem 0 1rem 0',
 };
 
 const Portfolios = () => {
@@ -88,7 +87,7 @@ const Portfolios = () => {
                 'onChangePortfolioName': onChangePortfolioName, 
                 'onChangePortfolioDescription': onChangePortfolioDescription,
                 'onChangePortfolioAccess': onChangePortfolioAccess,
-                'createPortfolioOnClick': createPortfolioOnClick
+                'createPortfolioOnClick': createPortfolioOnClick 
             }}/>
         </div>
     );
