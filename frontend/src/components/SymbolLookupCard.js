@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
+import { AddSecurityForm } from '.';
 
 const cardStyle = {
     margin: '0 0 10px 0',
@@ -28,6 +29,9 @@ const SymbolLookupCard = (props) => {
                     </Card.Text>
                     <Card.Link>
                         <Button onClick={(e) => handleViewClick(e, props.data.symbol)}>View more</Button>
+                    </Card.Link>
+                    <Card.Link>
+                        <AddSecurityForm />
                     </Card.Link>
                 </Card.Body>
             </Card>
