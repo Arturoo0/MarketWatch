@@ -92,7 +92,7 @@ usersRouter.post(
 );
 
 usersRouter.post(
-    '/:userId/portfolios/add',
+    '/:userId/portfolios/securities',
     requestValidation({
         ...baseUserRequestValidationSchema,
         body: {
