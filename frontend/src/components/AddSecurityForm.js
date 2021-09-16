@@ -34,7 +34,7 @@ const AddSecurityForm = (props) => {
             price: enteredPrice,
             selectedPortfolio: selectedPortfolio 
         }
-        await post(`/users/${userId}/portfolios/create`, body);
+        await post(`/users/${userId}/portfolios/add`, body);
     };
 
     return (
