@@ -1,7 +1,7 @@
 const joi = require('joi');
 const _ = require('lodash');
 const express = require('express');
-const { NotFoundError, UnauthorizedError } = require('../utils/errors');
+const { NotFoundError, ForbiddenError } = require('../utils/errors');
 const checkAuthentication = require('../middleware/authentication');
 const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils');
 
@@ -45,25 +45,42 @@ usersRouter.get(
 );
 
 usersRouter.post(
-    '/:userId/portfolio',
+    '/:userId/portfolios',
     requestValidation({
         ...baseUserRequestValidationSchema,
         body: {
-            name: joi.string().optional(),
-            description: joi.string().optional(),
-            public: joi.boolean().optional(),
+            name: joi.string()
+                .allow('')
+                .optional(),
+            description: joi.string()
+                .allow('')
+                .optional(),
+            access: joi.string()
+                .valid('private', 'public')
+                .required(),
         },
     }),
     asyncHandlerWrapper(
         async (req) => {
             const { userId } = req.params;
             const { user: { id: contextUserId } } = req.context;
+            // TODO: Need to take some time to think about how we handle resource/role authorizations.
             if (contextUserId !== userId) {
-                throw new UnauthorizedError({
+                throw new ForbiddenError({
                     message: 'Unauthorized attempt to create a portfolio',
+                    userMessage: 'You do not have access to this resource.',
                 });
             }
-            const newPortfolio = new Portfolio(req.body);
+            const { name, description, access } = req.body;
+            const portfolioSchema = {
+                name,
+                description,
+                isPublic: access === 'public',
+            };
+            const normalizedPortfolioSchema = _.omitBy(portfolioSchema, (value) => {
+                return _.isNil(value) || !value;
+            });
+            const newPortfolio = new Portfolio(normalizedPortfolioSchema);
             await newPortfolio.save();
             await User.findByIdAndUpdate(
                 userId,

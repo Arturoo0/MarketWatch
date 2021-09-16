@@ -62,6 +62,16 @@ class ConflictError extends BaseError {
     }
 }
 
+class ForbiddenError extends BaseError {
+    constructor(options) {
+        super({
+            statusCode: StatusCodes.FORBIDDEN,
+            message: options?.message || ReasonPhrases.FORBIDDEN,
+            userMessage: options?.userMessage,
+        });
+    }
+}
+
 module.exports = {
     SAFE_ERROR_MESSAGE,
     SAFE_USER_ERROR_MESSAGE,
@@ -71,4 +81,5 @@ module.exports = {
     NotFoundError,
     UnauthorizedError,
     ConflictError,
+    ForbiddenError,
 };

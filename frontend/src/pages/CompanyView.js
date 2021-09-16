@@ -51,7 +51,7 @@ const CompanyView = () => {
         ];
         const [profile, quote, news, candles, financials] = await Promise.all(
             endpoints.map((endpoint) => {
-                return get(`/market-data/company/${symbol}/${endpoint}`, {});
+                return get(`/market-data/companies/${symbol}/${endpoint}`, {});
             })
         );
         setCompanyData(profile);
