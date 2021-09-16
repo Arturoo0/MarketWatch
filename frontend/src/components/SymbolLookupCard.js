@@ -39,7 +39,10 @@ const SymbolLookupCard = (props) => {
                         }>Add security</Button>
                         <AddSecurityForm config={{
                             modalTriggered: showModal,
-                            hide: () => {setShowModal(false)}
+                            hide: () => {setShowModal(false)},
+                            info: {
+                                symbol: props.data.symbol
+                            }
                         }}/>
                     </Card.Link>
                 </Card.Body>
