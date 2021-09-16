@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Search, SymbolLookupCard } from '../components';
+import { getPortfolios } from '../actions/portfoliosActions.js';
+import { useDispatch, useSelector } from 'react-redux';
 import { get } from '../utils/baseRequest';
 import { useDebounce } from '../utils/utils';
 import { Row, Col } from 'react-bootstrap';
@@ -20,9 +22,11 @@ const noMatchesTextStyle = {
 }
 
 const Securities = () => {
+    const dispatch = useDispatch();
     const [searchTerm, setSearchTerm] = useState('');
     const [matchedSymbols, setMatchedSymbols] = useState({});
 
+    const userId = useSelector(state => state.app.userId);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     useEffect(() => {
@@ -35,8 +39,9 @@ const Securities = () => {
             const matchedSymbols = response.data;
             setMatchedSymbols(matchedSymbols);
         }
+        dispatch(getPortfolios(userId));
         searchForQuery();
-    }, [debouncedSearchTerm]);
+    }, [debouncedSearchTerm, userId, dispatch]);
 
     const renderMatchedSymbols = () => {
         const renderedCards = matchedSymbols?.US_EX_SYMBOLS?.map((symbol) => {

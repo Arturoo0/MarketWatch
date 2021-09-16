@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 const AddSecurityForm = (props) => {
     const { 
@@ -10,6 +11,8 @@ const AddSecurityForm = (props) => {
             symbol
         }
     } = props.config;
+    const portfolios = useSelector(state => state.portfolios);
+    
     return (
         <Modal centered show={modalTriggered} onHide={hide}>
             <Modal.Header closeButton>
