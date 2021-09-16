@@ -1,19 +1,38 @@
+const joi = require('joi');
 const express = require('express');
 const FinnhubClient = require('../services/finnhub-client');
 const checkAuthentication = require('../middleware/authentication');
 const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils');
-const joi = require('joi');
 
 const marketDataRouter = express.Router();
 
 marketDataRouter.use(checkAuthentication());
 
+const PAGE_LIMIT = 50;
+
 marketDataRouter.get(
     '/us-ex-symbols',
+    requestValidation({
+        query: {
+            keywords: joi.string()
+                .allow('')
+                .required(),
+            offset: joi.number()
+                .min(0)
+                .required(),
+        },
+    }),
     asyncHandlerWrapper(async (req) => {
-        const { keywords } = req.query;
-        const usExSymbols = await FinnhubClient.getSymbols(keywords);
-        return usExSymbols;
+        const { keywords, offset } = req.query;
+        const { US_EX_SYMBOLS } = await FinnhubClient.getSymbols(keywords);
+        const total = US_EX_SYMBOLS.length;
+        const pages = Math.ceil(total / PAGE_LIMIT);
+        const normalizedOffset = offset * PAGE_LIMIT;
+        return {
+            symbols: US_EX_SYMBOLS.slice(normalizedOffset, normalizedOffset + PAGE_LIMIT),
+            total,
+            pages,
+        };
     }),
 );
 
