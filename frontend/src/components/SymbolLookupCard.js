@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { AddSecurityForm } from '.';
 
@@ -18,6 +18,7 @@ const handleViewClick = (e, symbol) => {
 };
 
 const SymbolLookupCard = (props) => {
+    const [showModal, setShowModal] = useState(false);
     return (
         <div style={cardStyle}>
             <Card className='shadow-sm' style={{ width: '18rem' }}>
@@ -31,7 +32,15 @@ const SymbolLookupCard = (props) => {
                         <Button onClick={(e) => handleViewClick(e, props.data.symbol)}>View more</Button>
                     </Card.Link>
                     <Card.Link>
-                        <AddSecurityForm />
+                        <Button onClick={
+                            () => {
+                                setShowModal(true);
+                            }
+                        }>Add security</Button>
+                        <AddSecurityForm config={{
+                            modalTriggered: showModal,
+                            hide: () => {setShowModal(false)}
+                        }}/>
                     </Card.Link>
                 </Card.Body>
             </Card>
