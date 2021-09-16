@@ -12,6 +12,16 @@ const AddSecurityForm = (props) => {
         }
     } = props.config;
     const portfolios = useSelector(state => state.portfolios);
+
+    const renderPortfolios = (portfolios) => {
+        if (portfolios.length === 0){
+            return <div>No portfolios available</div>
+        }
+        const portfolioList = portfolios.map((portfolio) => 
+            <option value={portfolio.id}>{portfolio.name}</option>
+        );
+        return portfolioList;
+    };
     
     return (
         <Modal centered show={modalTriggered} onHide={hide}>
@@ -27,8 +37,7 @@ const AddSecurityForm = (props) => {
                         <Form.Control type='price' placeholder='Price (average buy in)'/>
                         <Form.Label>Portfolios</Form.Label>
                         <Form.Select>
-                            <option value='private'>Private</option>
-                            <option value='public'>Public</option>
+                            {renderPortfolios(portfolios)}
                         </Form.Select>
                     </Form.Group>
                 </Form>
