@@ -10,13 +10,14 @@ function checkAuthentication() {
             if (!session) {
                 throw new UnauthorizedError({
                     message: 'Unknown session ID',
+                    userMessage: 'Please login.',
                 });
             }
             if (Date.now() >= session.expiresAt) {
                 await Session.deleteOne({ _id: session._id });
                 throw new UnauthorizedError({
                     message: 'Expired session',
-                    userMessage: 'Please login.',
+                    userMessage: 'Please login again.',
                 });
             }
             req.context.user.id = session.userId;

@@ -18,7 +18,7 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company/:symbol/profile',
+    '/companies/:symbol/profile',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
         const companyProfile = await FinnhubClient.getCompanyProfile(symbol);
@@ -27,7 +27,7 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company/:symbol/quote',
+    '/companies/:symbol/quote',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
         const companyQuote = await FinnhubClient.getCompanyQuote(symbol);
@@ -36,7 +36,7 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company/:symbol/news',
+    '/companies/:symbol/news',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
         const companyNews = await FinnhubClient.getCompanyNews(symbol);
@@ -45,7 +45,7 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company/:symbol/candles',
+    '/companies/:symbol/candles',
     requestValidation({
         query: {
             resolution: joi.string().required(),
@@ -67,7 +67,7 @@ marketDataRouter.get(
 );
 
 marketDataRouter.get(
-    '/company/:symbol/basic-financials',
+    '/companies/:symbol/basic-financials',
     asyncHandlerWrapper(async (req) => {
         const { symbol } = req.params;
         const financials = await FinnhubClient.getBasicCompanyFinancials(

@@ -46,7 +46,7 @@ const post = async (endpoint, body) => {
     } catch(err) {
         console.log(err);
         return {
-            status: err.response.status, 
+            status: err.response.status,
             errRes: err.response.data
         }
     }
