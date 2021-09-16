@@ -91,4 +91,17 @@ usersRouter.post(
     ),
 );
 
+usersRouter.post(
+    '/:userId/portfolios/create',
+    requestValidation({
+        baseUserRequestValidationSchema
+    }),
+    asyncHandlerWrapper(
+        async (req) => {
+            console.log(req.body);
+            return {};
+        }
+    )
+);
+
 module.exports = usersRouter;

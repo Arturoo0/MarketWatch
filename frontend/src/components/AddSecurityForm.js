@@ -1,9 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { post } from '../utils/baseRequest';
 
 const AddSecurityForm = (props) => {
+    const [enteredUnits, setEnteredUnits] = useState();
+    const [enteredPrice, setEnteredPrice] = useState();
+    const [selectedPortfolio, setSelectedPortfolio] = useState();
     const { 
         modalTriggered,
         hide,
@@ -12,6 +16,7 @@ const AddSecurityForm = (props) => {
         }
     } = props.config;
     const portfolios = useSelector(state => state.portfolios);
+    const userId = useSelector(state => state.app.userId);
 
     const renderPortfolios = (portfolios) => {
         if (portfolios.length === 0){
@@ -22,7 +27,15 @@ const AddSecurityForm = (props) => {
         );
         return portfolioList;
     };
-    
+
+    const pullAddSecurityData = async () => {
+        await post(`/users/${userId}/portfolios/create`, {
+            units: enteredUnits,
+            price: enteredPrice,
+            portfolio: selectedPortfolio 
+        });
+    };
+
     return (
         <Modal centered show={modalTriggered} onHide={hide}>
             <Modal.Header closeButton>
@@ -32,18 +45,18 @@ const AddSecurityForm = (props) => {
                 <Form>
                     <Form.Group className='mb-3' controlId='formBasicEmail'>
                         <Form.Label>Units</Form.Label>
-                        <Form.Control type='units' placeholder='Number of units'/>
+                        <Form.Control onChange={e => setEnteredUnits(e.target.value)} type='units' placeholder='Number of units'/>
                         <Form.Label>Price</Form.Label>
-                        <Form.Control type='price' placeholder='Price (average buy in)'/>
+                        <Form.Control onChange={e => setEnteredPrice(e.target.value)} type='price' placeholder='Price (average buy in)'/>
                         <Form.Label>Portfolios</Form.Label>
-                        <Form.Select>
+                        <Form.Select onChange={e => setSelectedPortfolio(e.target.value)}>
                             {renderPortfolios(portfolios)}
                         </Form.Select>
                     </Form.Group>
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant='success'>Create</Button>
+                <Button onClick={() => {pullAddSecurityData()}} variant='success'>Create</Button>
             </Modal.Footer>
         </Modal>
     );  
