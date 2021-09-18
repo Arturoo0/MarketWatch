@@ -8,6 +8,10 @@ const PortfolioSchema = mongoose.Schema({
         required: true,
         default: uuidv4,
     },
+    userId: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
         required: false,
@@ -37,11 +41,6 @@ const PortfolioSchema = mongoose.Schema({
         type: Number,
         required: false,
         default: Date.now,
-    },
-    securities: {
-        type: [String],
-        required: false,
-        default: [],
     },
 });
 

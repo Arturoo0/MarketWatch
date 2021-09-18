@@ -7,6 +7,10 @@ const SecurityTransactionSchema = mongoose.Schema({
         required: true,
         default: uuidv4,
     },
+    portfolioId: {
+        type: String,
+        required: true,
+    },
     securitySymbol: {
         type: String,
         required: true,
