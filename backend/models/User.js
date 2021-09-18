@@ -28,15 +28,11 @@ const UserSchema = mongoose.Schema({
         required: true,
         default: false,
     },
-    isAdmin: {
-        type: Boolean,
-        required: true,
-        default: false,
-    },
-    portfolios: {
+    roles: {
         type: [String],
+        enum: ['USER','ADMIN'],
         required: true,
-        default: [],
+        default: ['USER'],
     },
 });
 
