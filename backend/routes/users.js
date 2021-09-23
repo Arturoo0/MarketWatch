@@ -90,6 +90,7 @@ usersRouter.post(
             units: joi.string()
                 .allow('')
                 .optional()
+                .uuid({ version: 'uuidv4' })
         },
     }),
     asyncHandlerWrapper(
