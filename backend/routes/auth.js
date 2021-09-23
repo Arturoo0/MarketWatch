@@ -108,16 +108,15 @@ authRouter.post(
                     userMessage: 'This username is not available.'
                 });
             }
-            const defaultPortfolio = new Portfolio();
-            await defaultPortfolio.save();
             const hashedPassword = await hash(password);
             const user = new User({
                 email,
                 username,
                 password: hashedPassword,
-                portfolios: [defaultPortfolio._id],
             });
             await user.save();
+            const defaultPortfolio = new Portfolio({ userId: user._id });
+            await defaultPortfolio.save();
             await addSessionCookie(user._id, res);
             res.status(201);
             return {

@@ -25,7 +25,6 @@ const MAX_PAGE_WINDOW_SIZE = 7;
 
 const Securities = () => {
     const dispatch = useDispatch();
-    const [previousSearchTerm, setPreviousSearchTerm] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [pageNumber, setPageNumber] = useState(0);
     const [searchQueryResult, setSearchQueryResult] = useState({
@@ -38,6 +37,10 @@ const Securities = () => {
 
     useEffect(() => {
         async function searchForQuery() {
+            if (searchTerm !== debouncedSearchTerm) {
+                setPageNumber(0);
+                return;
+            }
             const searchQuery = {
                 keywords: debouncedSearchTerm,
                 offset: Math.max(pageNumber, 0),
@@ -46,14 +49,10 @@ const Securities = () => {
             const response = await get(`/market-data/us-ex-symbols?${queryString}`);
             const queryResult = response.data;
             setSearchQueryResult(queryResult);
-            setPreviousSearchTerm(debouncedSearchTerm);
-            if (previousSearchTerm !== debouncedSearchTerm) {
-                setPageNumber(0);
-            }
         }
         dispatch(getPortfolios(userId));
         searchForQuery();
-    }, [pageNumber, previousSearchTerm, debouncedSearchTerm, userId, dispatch]);
+    }, [pageNumber, dispatch, searchTerm, debouncedSearchTerm]);
 
     const renderMatchedSymbols = () => {
         const renderedCards = searchQueryResult?.symbols?.map((symbol) => {
