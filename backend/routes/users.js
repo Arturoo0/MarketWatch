@@ -1,11 +1,10 @@
 const joi = require('joi');
 const _ = require('lodash');
 const express = require('express');
-const { NotFoundError, ForbiddenError } = require('../utils/errors');
+const { ForbiddenError } = require('../utils/errors');
 const checkAuthentication = require('../middleware/authentication');
 const { asyncHandlerWrapper, requestValidation } = require('../utils/apiUtils');
 
-const { User } = require('../models/User');
 const { Portfolio } = require('../models/Portfolio');
 
 const usersRouter = express.Router();
@@ -15,8 +14,8 @@ usersRouter.use(checkAuthentication());
 const baseUserRequestValidationSchema = {
     params: {
         userId: joi.string()
-        .uuid({ version: 'uuidv4' })
-        .required(),
+            .uuid({ version: 'uuidv4' })
+            .required(),
     },
 };
 
@@ -27,19 +26,11 @@ usersRouter.get(
         async (req) => {
             const { userId } = req.params;
             const { user: { id: contextUserId } } = req.context;
-            const user = await User.findOne({ _id: userId }).select('portfolios');
-            if (!user) {
-                throw new NotFoundError({
-                    message: `No user found with id: ${userId}`
-                });
-            }
-            let portfolios = await Portfolio.find()
-                .where('_id')
-                .in(user.portfolios);
-            if (userId !== contextUserId) {
-                portfolios = portfolios.filter((portfolio) => portfolio.public);
-            }
-            return { portfolios };
+            const shouldListAllPortfolios = userId === contextUserId;
+            const userPortfolios = await Portfolio.find()
+                .where('userId').equals(userId)
+                .where('public').in([true, !shouldListAllPortfolios]);
+            return { portfolios: userPortfolios };
         }
     ),
 );
@@ -75,17 +66,14 @@ usersRouter.post(
             const portfolioSchema = {
                 name,
                 description,
-                isPublic: access === 'public',
+                public: access === 'public',
+                userId,
             };
             const normalizedPortfolioSchema = _.omitBy(portfolioSchema, (value) => {
                 return _.isNil(value) || !value;
             });
             const newPortfolio = new Portfolio(normalizedPortfolioSchema);
             await newPortfolio.save();
-            await User.findByIdAndUpdate(
-                userId,
-                { $push: { portfolios: newPortfolio._id } },
-            );
             return { portfolio: newPortfolio };
         }
     ),
