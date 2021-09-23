@@ -83,14 +83,14 @@ usersRouter.post(
     '/:userId/portfolios/:portfolioId/securities',
     requestValidation({
         params: {
-            portfolioId: joi.string(),
+            portfolioId: joi.string()
+                .uuid({ version: 'uuidv4' })
+            ,
             ...baseUserRequestValidationSchema.params
         },
         body: {
             units: joi.string()
                 .allow('')
-                .optional()
-                .uuid({ version: 'uuidv4' })
         },
     }),
     asyncHandlerWrapper(
