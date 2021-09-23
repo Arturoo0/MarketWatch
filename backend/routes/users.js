@@ -85,7 +85,7 @@ usersRouter.post(
         params: {
             portfolioId: joi.string()
                 .uuid({ version: 'uuidv4' })
-            ,
+                .required(), 
             ...baseUserRequestValidationSchema.params
         },
         body: {
