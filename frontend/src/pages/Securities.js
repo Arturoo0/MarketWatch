@@ -27,6 +27,7 @@ const Securities = () => {
     const dispatch = useDispatch();
     const [searchTerm, setSearchTerm] = useState('');
     const [pageNumber, setPageNumber] = useState(0);
+    const [fetchedUserPortfolios, setFetchedUserPortfolios] = useState(false);
     const [searchQueryResult, setSearchQueryResult] = useState({
         pages: 0,
         symbols: [],
@@ -36,6 +37,12 @@ const Securities = () => {
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     useEffect(() => {
+        async function dispatchGetUserPortfolios() {
+            if (!fetchedUserPortfolios){
+                dispatch(getPortfolios(userId));
+            }
+            setFetchedUserPortfolios(true);
+        }
         async function searchForQuery() {
             if (searchTerm !== debouncedSearchTerm) {
                 setPageNumber(0);
@@ -50,8 +57,8 @@ const Securities = () => {
             const queryResult = response.data;
             setSearchQueryResult(queryResult);
         }
-        dispatch(getPortfolios(userId));
         searchForQuery();
+        dispatchGetUserPortfolios();
     }, [pageNumber, dispatch, searchTerm, debouncedSearchTerm]);
 
     const renderMatchedSymbols = () => {
