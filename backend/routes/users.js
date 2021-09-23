@@ -101,13 +101,7 @@ usersRouter.post(
         body: {
             units: joi.string()
                 .allow('')
-                .optional(),
-            price: joi.string()
-                .allow('')
-                .optional(),
-            selectedPortfolio: joi.string()
-                .allow('')
-                .optional(),
+                .optional()
         },
     }),
     asyncHandlerWrapper(
