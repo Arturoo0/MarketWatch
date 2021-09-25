@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Search, SymbolLookupCard } from '../components';
+import { getPortfolios } from '../actions/portfoliosActions.js';
+import { useDispatch, useSelector } from 'react-redux';
 import { get } from '../utils/baseRequest';
 import { useDebounce } from '../utils/utils';
 import { Row, Col, Pagination } from 'react-bootstrap';
@@ -22,17 +24,25 @@ const noMatchesTextStyle = {
 const MAX_PAGE_WINDOW_SIZE = 7;
 
 const Securities = () => {
+    const dispatch = useDispatch();
     const [searchTerm, setSearchTerm] = useState('');
     const [pageNumber, setPageNumber] = useState(0);
+    const [fetchedUserPortfolios, setFetchedUserPortfolios] = useState(false);
     const [searchQueryResult, setSearchQueryResult] = useState({
         pages: 0,
         symbols: [],
         total: 0,
     });
-
+    const userId = useSelector(state => state.app.userId);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     useEffect(() => {
+        async function dispatchGetUserPortfolios() {
+            if (!fetchedUserPortfolios){
+                dispatch(getPortfolios(userId));
+            }
+            setFetchedUserPortfolios(true);
+        }
         async function searchForQuery() {
             if (searchTerm !== debouncedSearchTerm) {
                 setPageNumber(0);
@@ -48,7 +58,8 @@ const Securities = () => {
             setSearchQueryResult(queryResult);
         }
         searchForQuery();
-    }, [pageNumber, searchTerm, debouncedSearchTerm]);
+        dispatchGetUserPortfolios();
+    }, [pageNumber, dispatch, searchTerm, debouncedSearchTerm]);
 
     const renderMatchedSymbols = () => {
         const renderedCards = searchQueryResult?.symbols?.map((symbol) => {

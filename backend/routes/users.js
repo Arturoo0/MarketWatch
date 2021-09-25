@@ -79,4 +79,26 @@ usersRouter.post(
     ),
 );
 
+usersRouter.post(
+    '/:userId/portfolios/:portfolioId/securities',
+    requestValidation({
+        params: {
+            portfolioId: joi.string()
+                .uuid({ version: 'uuidv4' })
+                .required(), 
+            ...baseUserRequestValidationSchema.params
+        },
+        body: {
+            units: joi.string()
+                .allow('')
+        },
+    }),
+    asyncHandlerWrapper(
+        async (req) => {
+            console.log(req.body);
+            return {};
+        }
+    )
+);
+
 module.exports = usersRouter;

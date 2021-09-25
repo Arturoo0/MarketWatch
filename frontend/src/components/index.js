@@ -8,6 +8,8 @@ import RelatedNews from "./RelatedNews";
 import CandlestickCompanyView from "./CandlestickCompanyView";
 import FinancialInfo from "./FinancialInfo";
 import PageSpinner from "./PageSpinner";
+import AddPortfolioForm from "./AddPortfolioForm";
+import AddSecurityForm from "./AddSecurityForm";
 
 export {
     LoginForm,
@@ -19,4 +21,6 @@ export {
     CandlestickCompanyView,
     FinancialInfo,
     PageSpinner,
+    AddPortfolioForm,
+    AddSecurityForm
 }
